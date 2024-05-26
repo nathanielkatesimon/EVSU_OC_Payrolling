@@ -69,3 +69,5 @@ end
 gem "devise", "~> 4.9"
 
 gem "money-rails", "~> 1.15"
+
+gem "pundit", "~> 2.3"
