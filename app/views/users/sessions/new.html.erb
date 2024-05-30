@@ -19,7 +19,9 @@
         <%= f.submit "Log in", class: "btn btn-primary w-100" %>
       </div>
 
-      <p class="text-center mt-4">By using this service, you understood and agree to our <a href="#">Terms of Use and Privacy Statement</a></p>
+      <p class="text-center mt-4">By using this service, you understood and agree to our 
+        <%= link_to "Terms of Use and Privacy Statement", terms_of_use_and_privacy_statement_path %>
+      </p>
     <% end %>
   </div></div>
 </div>

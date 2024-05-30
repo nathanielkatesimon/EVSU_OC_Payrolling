@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   root "dashboard#index"
   devise_for :users, path: 'auth'
 
+  get '/terms_of_use_and_privacy_statement' => 'static_pages#terms_of_use_and_privacy_statement', as: 'terms_of_use_and_privacy_statement'
+
   resources :payrolls
   resources :users
 end
