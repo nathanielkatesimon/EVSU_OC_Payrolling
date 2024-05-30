@@ -1,0 +1,67 @@
+<div data-controller="ada-printer">
+
+<div class="d-flex">
+  <button id="printBtn" class="ms-auto btn btn-success text-light btn-sm" data-action="click->ada-printer#print">Print</button>
+</div>
+
+<div class="row g-0 w-100">
+  <div class="col-2">
+    <img class="img-fluid" src="<%= asset_path("evsu-logo.png") %>" width="200" />
+  </div>
+  <div class="col-8 px-5">
+    <p class="lh-1">Republic of the Philippines</p>
+    <p class="lh-1 fw-bold text-primary">EASTERN VISAYAS STATE UNIVERSITY</p>
+    <p class="lh-1">Ormoc City</p>
+    <hr>
+    <p class="text-center">EVSU ORMOC CAMPUS</p>
+  </div>
+  <div class="col-2">
+    <img class="img-fluid" src="<%= asset_path("image.png") %>" width="200" />
+  </div>
+</div>
+
+<div>
+  <p><%= @payroll.updated_at.strftime("%B %d, %Y") %></p>
+</div>
+
+<div>
+  <p class="lh-1 fw-bold">THE MANAGER</p>
+  <p class="lh-1">Development Bank of the Philippines</p>
+  <p class="lh-1">Ormoc City Branch</p>
+</div>
+<br>
+<div>
+  <p class="lh-1">Dear Ma'am</p>
+  <p class="lh-1">On behalf of EVSU-OC, I hereby authorize ______________
+to debit the university's payroll account for the purpose of 
+disbursing employee salaries and wages. Below are the details of the account and the authorized transactions.</p>
+</div>
+
+<% if @payroll.part_time? %>
+  <table class="table"><thead><tr><th>NAME</th><th>BANK ACCT.</th><th>AMOUNT</th></tr></thead>
+  <tbody>
+  <% @payroll.part_time_entries.each do |entry| %>
+    <tr>
+      <td><%= entry.user.full_name.upcase %> </td>
+      <td><%= entry.user.bank_acct_no %> </td>
+      <td><%= entry.net.format %></td>
+    </tr>
+  <% end %>
+  </tbody></table>
+<% end %>
+
+
+<br><br>
+
+<p>Thank you and more power</p>
+<br><br>
+
+<p>Respectfully yours,</p>
+<br><br><br><br>
+
+<p>_________________________</p>
+<i>Cashier Designate</i>
+<br><br><br><br>
+<p><b>JEFFREY V. OCAY</b></p>
+<i>Campus Director</i>
+</div>

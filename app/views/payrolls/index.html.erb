@@ -1,1 +1,24 @@
-asds
+<div class="d-flex">
+  <%= link_to "New", new_payroll_path, class: "btn btn-primary ms-auto"%>
+</div>
+
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Month</th>
+        <th>Type</th>
+        <th>Batch</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "payroll", collection: @payrolls %>
+    </tbody>
+  </table>
+</div>
+
+<div>
+  <%== pagy_bootstrap_nav(@pagy) if @pagy.next || @pagy.prev %>
+</div>

@@ -10,15 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_30_075315) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_30_171838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "deductions", force: :cascade do |t|
+    t.string "deductable_type", null: false
+    t.bigint "deductable_id", null: false
+    t.integer "amount_cents"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deductable_type", "deductable_id"], name: "index_deductions_on_deductable"
+  end
+
+  create_table "part_time_entries", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "rate_cents"
+    t.integer "total_rendered_hours"
+    t.bigint "payroll_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payroll_id"], name: "index_part_time_entries_on_payroll_id"
+    t.index ["user_id"], name: "index_part_time_entries_on_user_id"
+  end
 
   create_table "payrolls", force: :cascade do |t|
     t.integer "month"
     t.integer "batch"
     t.integer "for"
-    t.integer "status"
+    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -40,8 +61,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_30_075315) do
     t.string "last_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "bank_acct_no"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "part_time_entries", "payrolls"
+  add_foreign_key "part_time_entries", "users"
 end

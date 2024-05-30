@@ -2,3 +2,5 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import "coreui"
+import "jquery"
+import "jquery.repeater"

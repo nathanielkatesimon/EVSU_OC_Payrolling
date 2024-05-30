@@ -26,14 +26,15 @@
   </div>
 
   <div class="mb-4">
-    <%= form.label :salary, class: "required fs-6 fw-bold" %>
-    <%= form.number_field :salary, class: 'form-control form-control-sm' %>
-  </div>
-
-  <div class="mb-4">
     <%= form.label :email, class: "required fs-6 fw-bold" %>
     <%= form.email_field :email, class: 'form-control form-control-sm' %>
   </div>
+
+  <div class="mb-4">
+    <%= form.label :bank_acct_no, class: "required fs-6 fw-bold" %>
+    <%= form.text_field :bank_acct_no, class: 'form-control form-control-sm' %>
+  </div>
+
 
   <div class="mb-4">
     <%= form.label :password, class: "required fs-6 fw-bold" %>

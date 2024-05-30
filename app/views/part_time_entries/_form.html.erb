@@ -1,0 +1,61 @@
+<%= form_with model: part_time_entry, id: :form_repeater, data: { controller: "repeater" } do |form| %>
+  
+  <%= form.hidden_field :payroll_id %>
+
+  <div class="mb-4">
+    <%= form.label :user, class: "required fs-6 fw-bold" %>
+    <%= form.select :user_id, User.all.map { |u| [u.full_name, u.id] }, {},  class: 'form-control form-control-sm' %>
+  </div>
+  
+  <div class="mb-4">
+    <%= form.label :hourly_rate, class: "required fs-6 fw-bold" %>
+    <%= form.number_field :rate, class: 'form-control form-control-sm' %>
+  </div>
+  
+  <div class="mb-4">
+    <%= form.label :total_rendered_hours, class: "required fs-6 fw-bold" %>
+    <%= form.number_field :total_rendered_hours, class: 'form-control form-control-sm' %>
+  </div>
+
+  <h5>Deductions</h5>
+  <hr>
+
+  <%= form.fields_for :deductions do |deduction_form| %>
+    <div data-repeater-list="part_time_entry[deductions_attributes]">
+      <div data-repeater-item class="row g-0 align-items-end" >
+        <%= deduction_form.hidden_field :id %>
+
+        <div class="col-12 col-lg-4 px-2">
+          <%= deduction_form.label :name, class: "required fs-6 fw-bold" %>
+          <%= deduction_form.text_field :name, class: 'form-control form-control-sm' %>
+        </div>
+
+        <div class="col-12 col-lg-4 px-2">
+          <%= deduction_form.label :amount, class: "required fs-6 fw-bold" %>
+          <%= deduction_form.number_field :amount, class: 'form-control form-control-sm' %>
+        </div>
+
+        <div class="col-2 col-lg-1 px-2">
+          <a href="javascript:;" data-repeater-delete class="btn btn-danger btn-sm text-light">
+            Delete
+          </a>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div id="records_to_destroy"></div>
+
+  <div class="form-group my-2 px-2">
+    <a href="javascript:;" data-repeater-create class="btn btn-info btn-sm">
+      Add Deduction
+    </a>
+  </div>
+
+  <%= render partial: "shared/errors", locals: { model: @part_time_entry } %>
+  
+  <div class="d-flex">
+    <%= form.submit nil, class: "btn btn-primary ms-auto" %>
+  </div>
+
+<% end %>

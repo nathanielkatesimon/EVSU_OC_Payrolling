@@ -1,0 +1,19 @@
+<h3>Start Payroll</h3>
+
+<%= form_with model: @payroll do |form| %>
+
+  <div class="mb-4">
+    <%= form.label :month, class: "required fs-6 fw-bold" %>
+    <%= form.select :month, enum_to_options(Payroll.months), {} , class: 'form-control form-control-sm' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :for, class: "required fs-6 fw-bold" %>
+    <%= form.select :for, enum_to_options(Payroll.fors), {} , class: 'form-control form-control-sm' %>
+  </div>
+
+  <%= render partial: "shared/errors", locals: { model: @payroll } %>
+
+  <%= form.submit nil, class: "btn btn-primary"%>
+
+<% end %>

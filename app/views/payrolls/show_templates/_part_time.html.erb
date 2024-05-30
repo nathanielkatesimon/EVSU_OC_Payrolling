@@ -1,0 +1,39 @@
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Rate</th>
+        <th>Total rendered hrs</th>
+        <th>Gross</th>
+        <th>Deductions</th>
+        <th>Total deductions</th>
+        <th>Net</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% payroll.part_time_entries.each do |entry| %>
+        <tr>
+        <td><%=entry.user.full_name%></td>
+        <td><%=entry.rate.format%></td>
+        <td><%=entry.total_rendered_hours%></td>
+        <td><%=entry.gross.format%></td>
+        <td>
+          <ul class="p-0">
+            <% entry.deductions.each do |deduction| %>
+              <li><%= deduction.name %> - <%= deduction.amount.format %></li>
+            <% end %>
+          </ul>
+        </td>
+        <td><%=entry.total_deductions.format%></td>
+        <td><%=entry.net.format%></td>
+        <td>
+          <%= link_to "Edit", edit_part_time_entry_path(entry), class: "btn btn-secondary btn-sm" if payroll.pending? %>
+        </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div><%= link_to "New entry", new_part_time_entry_path(payroll_id: payroll.id), class: "btn btn-primary" if payroll.pending? %></div>
+</div>

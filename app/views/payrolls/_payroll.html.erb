@@ -1,0 +1,19 @@
+<tr>
+  <td><%= payroll.month %></td>
+  <td><%= payroll.for.humanize %></td>
+  <td><%= payroll.batch %></td>
+  <td><%== payroll_badge(payroll) %></td>
+  <td class="text-end">
+    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
+      Action
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <%= link_to "View", payroll, class: "dropdown-item" %>
+      </li>
+      <li>
+        <%= button_to "Delete", payroll_path(payroll), method: :delete, class: "dropdown-item", data: { turbo_confirm: "Are you sure?" } %>
+      </li>
+    </ul>
+  </td>
+</tr>

@@ -1,0 +1,18 @@
+<% if payroll.pending? && current_user.human_resources? %>
+  <%= form_with model: payroll do |form| %>
+    <%= form.hidden_field :status, value: :forwarded_to_accounting %>
+    <%= form.submit "Forward to Accounting", class: "btn btn-info btn-sm ms-auto text-light"%>
+  <% end %>
+<% elsif payroll.forwarded_to_accounting? && current_user.accounting? %>
+  <%= form_with model: payroll do |form| %>
+    <%= form.hidden_field :status, value: :ready_for_ada %>
+    <%= form.submit "Ready for ADA", class: "btn btn-sm btn-warning ms-auto text-light"%>
+  <% end %>
+<% elsif payroll.ready_for_ada? && current_user.disbursing? %>
+  <%= form_with model: payroll do |form| %>
+    <%= form.hidden_field :status, value: :completed %>
+    <%= form.submit "Mark as Complete", class: "btn btn-sm btn-success ms-auto text-light"%>
+  <% end %>
+<% elsif payroll.completed? %>
+  <%= link_to "Print", ada_path(payroll), class: "btn btn-success btn-sm ms-auto text-light" %>
+<% end %>
