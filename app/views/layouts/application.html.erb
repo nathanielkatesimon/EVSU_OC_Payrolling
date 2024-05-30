@@ -14,7 +14,7 @@
   <body class="bg-white">
     <%= render partial: "layouts/header" if user_signed_in? %>
     <%= render partial: "layouts/flash" %>
-    <div class="p-4">
+    <div class="<%= "p-4" if user_signed_in? %>">
       <%= yield %>
     </div>
   </body>

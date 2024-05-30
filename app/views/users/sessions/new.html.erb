@@ -1,19 +1,25 @@
-<h2 class="text-primary">Log in</h2>
+<div class="w-100 vh-100 row gx-0 align-items-center justify-content-center position-relative p-4">
+  <img src="<%= asset_path('login-bg.png') %>" class="position-absolute w-100 vh-100" style="filter: blur(3px);opacity: 25%;">
+  <div class="card border-0 shadow col-12 col-lg-4 rounded-0 p-lg-4"><div class="card-body">
+    <div class="text-center"><h2 class="text-primary fw-bold">Log in</h2></div>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="field mb-4">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+      </div>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
+      <div class="field mb-4">
+        <%= f.label :password %><br />
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+      </div>
 
 
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
+      <div class="actions">
+        <%= f.submit "Log in", class: "btn btn-primary w-100" %>
+      </div>
 
+      <p class="text-center mt-4">By using this service, you understood and agree to our <a href="#">Terms of Use and Privacy Statement</a></p>
+    <% end %>
+  </div></div>
+</div>
