@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_25_150900) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_30_075315) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "payrolls", force: :cascade do |t|
+    t.integer "month"
+    t.integer "batch"
+    t.integer "for"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -23,6 +32,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_25_150900) do
     t.integer "role"
     t.integer "department"
     t.integer "salary_grade"
+    t.integer "employment_type"
     t.integer "hourly_rate_cents", default: 0
     t.integer "daily_rate_cents", default: 0
     t.integer "salary_cents", default: 0

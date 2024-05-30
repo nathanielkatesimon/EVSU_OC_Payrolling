@@ -11,7 +11,11 @@
     <%= javascript_importmap_tags %>
   </head>
     
-  <body>
-    <%= yield %>
+  <body class="bg-white">
+    <%= render partial: "layouts/header" if user_signed_in? %>
+    <%= render partial: "layouts/flash" %>
+    <div class="p-4">
+      <%= yield %>
+    </div>
   </body>
 </html>

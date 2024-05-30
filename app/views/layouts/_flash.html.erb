@@ -1,0 +1,16 @@
+
+<% if notice %>
+  <div class="alert alert-success rounded-0">
+    <%= notice %>
+  </div>
+<% elsif flash[:error] %>
+  <div class="alert alert-danger rounded-0">
+    <%= flash[:error]  %>
+  </div>
+<% elsif flash[:warning] %>
+  <div class="alert alert-warning rounded-0">
+    <%= flash[:warning]  %>
+  </div>
+<% end %>
+
+

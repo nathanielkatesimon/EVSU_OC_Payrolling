@@ -1,0 +1,11 @@
+<% if model.errors.any? %>
+  <div class="rounded-2 p-2">
+    <div style="color: red">
+      <ul>
+        <% model.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>

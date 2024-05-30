@@ -1,0 +1,21 @@
+<div class="d-flex">
+  <%= link_to "New user", new_user_path, class: "btn btn-primary ms-auto" %>
+</div>
+
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Department</th>
+        <th>Employment</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "user", collection: @users %>
+    </tbody>
+  </table>
+</div>

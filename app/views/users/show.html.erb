@@ -1,0 +1,26 @@
+<h3>User Information</h3>
+<hr>
+<div class="row gx-0 mb-2">
+  <div class="col-12 col-lg-6">
+    <strong>Given Name: </strong><span><%= @user.first_name %></span>
+  </div>
+  <div class="col-12 col-lg-6">
+    <strong>Last Name: </strong><span><%= @user.last_name %></span>
+  </div>
+</div>
+<div class="row gx-0 mb-2">
+  <div class="col-12 col-lg-6">
+    <strong>Role: </strong><span><%= @user.role.humanize %></span>
+  </div>
+  <div class="col-12 col-lg-6">
+    <strong>Department: </strong><span><%= @user.department.humanize %></span>
+  </div>
+</div>
+<div class="row gx-0 mb-2">
+  <div class="col-12 col-lg-6">
+    <strong>Employment: </strong><span><%= @user.employment_type.humanize %></span>
+  </div>
+  <div class="col-12 col-lg-6">
+    <strong>Email: </strong><span><%= @user.email %></span>
+  </div>
+</div>

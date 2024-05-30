@@ -7,5 +7,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "dashboard#index"
-  devise_for :users
+  devise_for :users, path: 'auth'
+
+  resources :payrolls
+  resources :users
 end

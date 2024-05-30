@@ -34,10 +34,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
 
       t.integer :role
       t.integer :department
-      t.integer :salary_grade
-      t.integer :hourly_rate_cents, default: 0
-      t.integer :daily_rate_cents, default: 0
-      t.integer :salary_cents, default: 0
+      t.integer :employment_type
       t.string :first_name
       t.string :last_name
 

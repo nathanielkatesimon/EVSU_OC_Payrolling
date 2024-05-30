@@ -1,0 +1,23 @@
+<tr>
+  <td><%= user.full_name %></td>
+  <td><%= user.email %></td>
+  <td><%= user.role.humanize %></td>
+  <td><%= user.department.humanize %></td>
+  <td><%= user.employment_type.humanize %></td>
+  <td class="text-end">
+    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
+      Action
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <%= link_to "View", user, class: "dropdown-item" %>
+      </li>
+      <li>
+        <%= link_to "Edit", edit_user_path(user), class: "dropdown-item" %>
+      </li>
+      <li>
+        <%= button_to "Delete", user_path(user), method: :delete, class: "dropdown-item", data: { turbo_confirm: "Are you sure to delete this user?" } unless user == current_user  %>
+      </li>
+    </ul>
+  </td>
+</tr>
