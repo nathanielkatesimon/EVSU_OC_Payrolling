@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  rate_cents: 1
+  total_no_of_worked_days: 1
+  total_late_or_undertime: 1
+  late_or_undertime_deduction_cents: 1
+  total_overtime_hours: 1
+  overtime_pay_cents: 1
+  payroll: one
+
+two:
+  user: two
+  rate_cents: 1
+  total_no_of_worked_days: 1
+  total_late_or_undertime: 1
+  late_or_undertime_deduction_cents: 1
+  total_overtime_hours: 1
+  overtime_pay_cents: 1
+  payroll: two

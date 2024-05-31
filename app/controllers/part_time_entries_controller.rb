@@ -1,6 +1,6 @@
 class PartTimeEntriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_part_time_entry, only: %i[ edit update]
+  before_action :set_part_time_entry, only: %i[ edit update destroy ]
 
   def new
     @payroll = Payroll.find(params[:payroll_id])
@@ -35,11 +35,18 @@ class PartTimeEntriesController < ApplicationController
     end
   end
 
+  def destroy
+    @part_time_entry.destroy
+    respond_to do |format|
+      format.html { redirect_to @part_time_entry.payroll, notice: 'Part time entry was successfully destroyed.' }
+    end
+  end
+
   private
     def set_part_time_entry
       @part_time_entry = PartTimeEntry.find(params[:id])
     end
-  
+
     def part_time_entry_params
       params.require(:part_time_entry).permit(
         :user_id, :rate, :total_rendered_hours, :payroll_id,

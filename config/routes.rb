@@ -15,4 +15,5 @@ Rails.application.routes.draw do
   resources :payrolls
   resources :users
   resources :part_time_entries
+  resources :cos_entries
 end

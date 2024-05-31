@@ -7,4 +7,6 @@
 </div>
 <% if @payroll.part_time? %>
   <%= render partial: "payrolls/show_templates/part_time", locals: { payroll: @payroll } %>
+<% elsif @payroll.cos? %>
+  <%= render partial: "payrolls/show_templates/cos", locals: { payroll: @payroll } %>
 <% end %>

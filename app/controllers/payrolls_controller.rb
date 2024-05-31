@@ -2,7 +2,14 @@ class PayrollsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_payroll, only: %i[ show update destroy ada ]
 
-  def ada; end
+  def ada
+    @entries = case @payroll.for
+              when "part_time"
+                @payroll.part_time_entries
+              when "cos"
+                @payroll.cos_entries
+              end
+  end
 
   def index
     @pagy, @payrolls = pagy(Payroll.all.order(created_at: :desc), items: 10)
@@ -54,7 +61,9 @@ class PayrollsController < ApplicationController
     end
 
     def determine_batch
+      return @payroll&.batch if @payroll.present? || @payroll&.batches.present?
       month = params.dig(:payroll, :month)
-      Payroll.where(month: month).count + 1
+      ffor = params.dig(:payroll, :for)
+      Payroll.where(month: month, for: ffor).count + 1
     end
 end

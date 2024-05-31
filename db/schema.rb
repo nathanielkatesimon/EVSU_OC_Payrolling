@@ -10,9 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_30_171838) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_31_004338) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cos_entries", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "rate_cents"
+    t.integer "total_no_of_worked_days"
+    t.integer "total_late_or_undertime"
+    t.integer "total_overtime_hours"
+    t.bigint "payroll_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payroll_id"], name: "index_cos_entries_on_payroll_id"
+    t.index ["user_id"], name: "index_cos_entries_on_user_id"
+  end
 
   create_table "deductions", force: :cascade do |t|
     t.string "deductable_type", null: false
@@ -66,6 +79,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_30_171838) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "cos_entries", "payrolls"
+  add_foreign_key "cos_entries", "users"
   add_foreign_key "part_time_entries", "payrolls"
   add_foreign_key "part_time_entries", "users"
 end

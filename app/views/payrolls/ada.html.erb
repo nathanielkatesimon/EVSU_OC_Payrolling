@@ -37,18 +37,17 @@ to debit the university's payroll account for the purpose of
 disbursing employee salaries and wages. Below are the details of the account and the authorized transactions.</p>
 </div>
 
-<% if @payroll.part_time? %>
-  <table class="table"><thead><tr><th>NAME</th><th>BANK ACCT.</th><th>AMOUNT</th></tr></thead>
-  <tbody>
-  <% @payroll.part_time_entries.each do |entry| %>
-    <tr>
-      <td><%= entry.user.full_name.upcase %> </td>
-      <td><%= entry.user.bank_acct_no %> </td>
-      <td><%= entry.net.format %></td>
-    </tr>
-  <% end %>
-  </tbody></table>
+
+<table class="table"><thead><tr><th>NAME</th><th>BANK ACCT.</th><th>AMOUNT</th></tr></thead>
+<tbody>
+<% @entries.each do |entry| %>
+  <tr>
+    <td><%= entry.user.full_name.upcase %> </td>
+    <td><%= entry.user.bank_acct_no %> </td>
+    <td><%= entry.net.format %></td>
+  </tr>
 <% end %>
+</tbody></table>
 
 
 <br><br>

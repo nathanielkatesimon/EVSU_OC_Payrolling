@@ -8,6 +8,11 @@ class PartTimeEntry < ApplicationRecord
 
   monetize :rate_cents
 
+  def available_users
+    used_ids = payroll.part_time_entries.pluck(:user_id)
+    User.where.not(id: used_ids)
+  end
+
   def gross
     @gross ||= rate * total_rendered_hours
   end

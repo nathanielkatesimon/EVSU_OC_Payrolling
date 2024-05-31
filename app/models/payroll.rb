@@ -1,5 +1,7 @@
 class Payroll < ApplicationRecord
   has_many :part_time_entries, dependent: :destroy
+  has_many :cos_entries, dependent: :destroy
+
   validates :month, :batch, :for, :status, presence: true
 
   enum status: {pending: 0, forwarded_to_accounting: 1, ready_for_ada: 2, completed: 3 }
