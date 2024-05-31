@@ -8,6 +8,8 @@ class PayrollsController < ApplicationController
                 @payroll.part_time_entries
               when "cos"
                 @payroll.cos_entries
+              when "regular"
+                @payroll.regular_entries
               end
   end
 

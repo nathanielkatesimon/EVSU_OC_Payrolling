@@ -16,4 +16,5 @@ Rails.application.routes.draw do
   resources :users
   resources :part_time_entries
   resources :cos_entries
+  resources :regular_entries
 end

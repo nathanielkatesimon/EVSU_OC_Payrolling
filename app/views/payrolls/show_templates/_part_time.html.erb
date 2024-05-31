@@ -29,9 +29,11 @@
         <td><%=entry.total_deductions.format%></td>
         <td><%=entry.net.format%></td>
         <td>
-          <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false" <%= "disabled" unless payroll.pending? %>>
-            Action
-          </button>
+          <% if payroll.pending? %>
+            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
+              Action
+            </button>
+          <% end %>
           <ul class="dropdown-menu">
             <li>
               <%= link_to "Edit", edit_part_time_entry_path(entry), class: "dropdown-item" if payroll.pending? %>

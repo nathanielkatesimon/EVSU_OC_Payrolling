@@ -1,6 +1,6 @@
 class CosEntriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_part_time_entry, only: %i[ edit update destroy ]
+  before_action :set_cos_entry, only: %i[ edit update destroy ]
 
   def new
     @payroll = Payroll.find(params[:payroll_id])
@@ -43,7 +43,7 @@ class CosEntriesController < ApplicationController
   end
 
   private
-    def set_part_time_entry
+    def set_cos_entry
       @cos_entry = CosEntry.find(params[:id])
     end
 

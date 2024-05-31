@@ -3,29 +3,23 @@
     <thead>
       <tr>
         <th>User</th>
-        <th>Rate</th>
-        <th>Total # days</th>
-        <th>late/Undertime min</th>
-        <th>Late/Undertime</th>
-        <th>Total overtime hrs.</th>
-        <th>Overtime</th>
+        <th>Basic Pay</th>
+        <th>Abscences/LWOP (Days)</th>
+        <th>Absences/LWOP</th>
         <th>Gross</th>
         <th>Deductions</th>
-        <th>Total Deductions</th>
+        <th>Total deductions</th>
         <th>Net</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <% payroll.cos_entries.each do |entry| %>
+      <% payroll.regular_entries.each do |entry| %>
         <tr>
         <td><%=entry.user.full_name%></td>
-        <td><%=entry.rate.format%></td>
-        <td><%=entry.total_no_of_worked_days%></td>
-        <td><%=entry.total_late_or_undertime%></td>
-        <td><%=entry.late_or_undertime_deduction.format%></td>
-        <td><%=entry.total_overtime_hours%></td>
-        <td><%=entry.overtime_comp.format%></td>
+        <td><%=entry.basic_pay.format%></td>
+        <td><%=entry.absences%></td>
+        <td><%=entry.leave_without_pay.format%></td>
         <td><%=entry.gross.format%></td>
         <td>
           <ul class="p-0">
@@ -44,10 +38,10 @@
           <% end %>
           <ul class="dropdown-menu">
             <li>
-              <%= link_to "Edit", edit_cos_entry_path(entry), class: "dropdown-item" if payroll.pending? %>
+              <%= link_to "Edit", edit_regular_entry_path(entry), class: "dropdown-item" if payroll.pending? %>
             </li>
             <li>
-              <%= button_to "Delete", cos_entry_path(entry), method: :delete, class: "dropdown-item", data: { turbo_confirm: "Are you sure?" } if payroll.pending? %>
+              <%= button_to "Delete", regular_entry_path(entry), method: :delete, class: "dropdown-item", data: { turbo_confirm: "Are you sure?" } if payroll.pending? %>
             </li>
           </ul>
         </td>
@@ -55,5 +49,5 @@
       <% end %>
     </tbody>
   </table>
-  <div><%= link_to "New entry", new_cos_entry_path(payroll_id: payroll.id), class: "btn btn-primary" if payroll.pending? %></div>
+  <div><%= link_to "New entry", new_regular_entry_path(payroll_id: payroll.id), class: "btn btn-primary" if payroll.pending? %></div>
 </div>
