@@ -27,7 +27,7 @@ class PayrollsController < ApplicationController
     @payroll = Payroll.new(payroll_params)
     respond_to do |format|
       if @payroll.save
-        format.html { redirect_to root_path, notice: 'Payroll was successfully created.' }
+        format.html { redirect_to @payroll, notice: 'Payroll was successfully created.' }
       else
         format.html { render :new, status: :see_other }
       end

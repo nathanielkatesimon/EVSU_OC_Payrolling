@@ -9,7 +9,7 @@ class PartTimeEntry < ApplicationRecord
   monetize :rate_cents
 
   def available_users
-    used_ids = payroll.part_time_entries.pluck(:user_id)
+    used_ids = payroll.part_time_entries.where.not(user_id: user_id).pluck(:user_id)
     User.where.not(id: used_ids)
   end
 

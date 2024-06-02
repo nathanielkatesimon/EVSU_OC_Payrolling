@@ -3,4 +3,11 @@
 <% end %>
 <br>
 
+<% if @payslips.blank? %>
+  <div class="h-100 w-100 d-flex align-items-center justify-content-center">
+    <h1 class="opacity-50 p-5 border w-100 text-center" style="border-style: dashed !important;">No Payslips yet.</h1>
+  </div>
+<% end %>
+
+
 <%== pagy_bootstrap_nav(@pagy) if @pagy.next || @pagy.prev %>

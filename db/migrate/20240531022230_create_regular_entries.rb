@@ -4,7 +4,7 @@ class CreateRegularEntries < ActiveRecord::Migration[7.1]
       t.references :user, null: false, foreign_key: true
       t.integer :basic_pay_cents
       t.references :payroll, null: false, foreign_key: true
-      t.float :absences
+      t.decimal :absences, precision: 10, scale: 2
 
       t.timestamps
     end

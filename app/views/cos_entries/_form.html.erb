@@ -14,17 +14,17 @@
   
   <div class="mb-4">
     <%= form.label "Total # of worked days", class: "required fs-6 fw-bold" %>
-    <%= form.number_field :total_no_of_worked_days, class: 'form-control form-control-sm' %>
+    <%= form.number_field :total_no_of_worked_days, class: 'form-control form-control-sm', step: 0.1 %>
   </div>
   
   <div class="mb-4">
     <%= form.label "Total late/Undertime", class: "required fs-6 fw-bold" %>
-    <%= form.number_field :total_late_or_undertime, class: 'form-control form-control-sm' %>
+    <%= form.number_field :total_late_or_undertime, class: 'form-control form-control-sm', step: 0.1 %>
   </div>
   
   <div class="mb-4">
     <%= form.label "Total overtime hrs", class: "required fs-6 fw-bold" %>
-    <%= form.number_field :total_overtime_hours, class: 'form-control form-control-sm' %>
+    <%= form.number_field :total_overtime_hours, class: 'form-control form-control-sm', step: 0.1 %>
   </div>
 
   <h5>Deductions</h5>

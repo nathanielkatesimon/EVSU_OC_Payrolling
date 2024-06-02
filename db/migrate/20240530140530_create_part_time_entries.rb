@@ -3,7 +3,7 @@ class CreatePartTimeEntries < ActiveRecord::Migration[7.1]
     create_table :part_time_entries do |t|
       t.references :user, null: false, foreign_key: true
       t.integer :rate_cents
-      t.integer :total_rendered_hours
+      t.decimal :total_rendered_hours, precision: 10, scale: 2
       t.references :payroll, null: false, foreign_key: true
 
       t.timestamps

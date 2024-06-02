@@ -17,9 +17,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_064919) do
   create_table "cos_entries", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.integer "rate_cents"
-    t.integer "total_no_of_worked_days"
-    t.integer "total_late_or_undertime"
-    t.integer "total_overtime_hours"
+    t.decimal "total_no_of_worked_days", precision: 10, scale: 2
+    t.decimal "total_late_or_undertime", precision: 10, scale: 2
+    t.decimal "total_overtime_hours", precision: 10, scale: 2
     t.bigint "payroll_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -40,7 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_064919) do
   create_table "part_time_entries", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.integer "rate_cents"
-    t.integer "total_rendered_hours"
+    t.decimal "total_rendered_hours", precision: 10, scale: 2
     t.bigint "payroll_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -71,7 +71,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_064919) do
     t.bigint "user_id", null: false
     t.integer "basic_pay_cents"
     t.bigint "payroll_id", null: false
-    t.float "absences"
+    t.decimal "absences", precision: 10, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["payroll_id"], name: "index_regular_entries_on_payroll_id"
@@ -86,11 +86,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_064919) do
     t.datetime "remember_created_at"
     t.integer "role"
     t.integer "department"
-    t.integer "salary_grade"
     t.integer "employment_type"
-    t.integer "hourly_rate_cents", default: 0
-    t.integer "daily_rate_cents", default: 0
-    t.integer "salary_cents", default: 0
     t.string "first_name"
     t.string "last_name"
     t.datetime "created_at", null: false

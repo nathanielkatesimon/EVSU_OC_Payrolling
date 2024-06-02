@@ -3,8 +3,6 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-
-  monetize :salary_cents, :daily_rate_cents, :hourly_rate_cents
   
   validates :first_name, :last_name, :role, :department, :employment_type, presence: true
   
