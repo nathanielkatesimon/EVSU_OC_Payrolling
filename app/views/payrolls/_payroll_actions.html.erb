@@ -11,8 +11,8 @@
 <% elsif payroll.ready_for_ada? && current_user.disbursing? %>
   <%= form_with model: payroll do |form| %>
     <%= form.hidden_field :status, value: :completed %>
-    <%= form.submit "Mark as Complete", class: "btn btn-sm btn-success ms-auto text-light"%>
+    <%= form.submit "Create ADA", class: "btn btn-sm btn-success ms-auto text-light"%>
   <% end %>
 <% elsif payroll.completed? %>
-  <%= link_to "Print", ada_path(payroll), class: "btn btn-success btn-sm ms-auto text-light" %>
+  <%= link_to "View ADA", ada_path(payroll), class: "btn btn-success btn-sm ms-auto text-light" %>
 <% end %>

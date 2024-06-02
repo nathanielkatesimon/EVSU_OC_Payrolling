@@ -1,0 +1,52 @@
+<%= form_with model: user, url: profile_path('update'), data: { turbo_frame: "_top" } do |form| %>
+  
+  <div class="mb-4">
+    <%= form.label :first_name, class: "required fs-6 fw-bold" %>
+    <%= form.text_field :first_name, class: 'form-control form-control-sm' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :last_name, class: "required fs-6 fw-bold" %>
+    <%= form.text_field :last_name, class: 'form-control form-control-sm' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :role, class: "required fs-6 fw-bold" %>
+    <%= form.select :role, enum_to_options(User.roles), {}, class: 'form-control form-control-sm', disabled: "disabled" %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :employment_type, class: "required fs-6 fw-bold" %>
+    <%= form.select :employment_type, enum_to_options(User.employment_types), {}, class: 'form-control form-control-sm', disabled: "disabled" %>
+  </div>
+  
+  <div class="mb-4">
+    <%= form.label :department, class: "required fs-6 fw-bold" %>
+    <%= form.select :department, enum_to_options(User.departments), {}, class: 'form-control form-control-sm' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :email, class: "required fs-6 fw-bold" %>
+    <%= form.email_field :email, class: 'form-control form-control-sm' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :bank_acct_no, class: "required fs-6 fw-bold" %>
+    <%= form.text_field :bank_acct_no, class: 'form-control form-control-sm' %>
+  </div>
+
+
+  <div class="mb-4">
+    <%= form.label :password, class: "required fs-6 fw-bold" %>
+    <%= form.password_field :password, class: 'form-control form-control-sm' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :current_password, class: "required fs-6 fw-bold" %>
+    <%= form.password_field :current_password, class: 'form-control form-control-sm' %>
+  </div>
+
+  <%= render partial: "shared/errors", locals: { model: user } %>
+
+  <%= form.submit "Update Account", class: "btn btn-primary"%>
+<% end %>

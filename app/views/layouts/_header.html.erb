@@ -20,6 +20,9 @@
         </div>
         <ul class="dropdown-menu">
           <li>
+            <%= link_to "Update Account", profile_index_path, class: "dropdown-item" %>
+          </li>
+          <li>
             <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
           </li>
         </ul>

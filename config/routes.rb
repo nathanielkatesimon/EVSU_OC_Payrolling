@@ -17,4 +17,5 @@ Rails.application.routes.draw do
   resources :part_time_entries
   resources :cos_entries
   resources :regular_entries
+  resources :profile, only: %i[index update]
 end
