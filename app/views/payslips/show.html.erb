@@ -1,0 +1,14 @@
+<div class="w-100 row gx-0 justify-content-center">
+  <div class="card rounded-0 col-12 col-lg-6 border-0 shadow">
+    <div class="card-header d-flex align-items-center gap-2">
+      <%= image_tag asset_path('evsu-logo.png'), width: 50%>
+      <div>
+        <h3 class="text-primary m-0">Eastern Visayas State University</h3>
+        <p class="m-0">Ormoc City Campus</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <%= render partial: "payslips/show_templates/#{@payslip.entry_typee}", locals: { payslip: @payslip }%>
+    </div>
+  </div>
+</div>

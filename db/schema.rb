@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_31_022230) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_02_064919) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_022230) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "payslips", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "entry_type", null: false
+    t.bigint "entry_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entry_type", "entry_id"], name: "index_payslips_on_entry"
+    t.index ["user_id"], name: "index_payslips_on_user_id"
+  end
+
   create_table "regular_entries", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.integer "basic_pay_cents"
@@ -94,6 +104,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_022230) do
   add_foreign_key "cos_entries", "users"
   add_foreign_key "part_time_entries", "payrolls"
   add_foreign_key "part_time_entries", "users"
+  add_foreign_key "payslips", "users"
   add_foreign_key "regular_entries", "payrolls"
   add_foreign_key "regular_entries", "users"
 end

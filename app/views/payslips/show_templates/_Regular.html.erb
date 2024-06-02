@@ -1,0 +1,45 @@
+<div class="row gx-0">
+  <span class="col-4 fw-bolder">Name</span>
+  <span class="col-4 text-center"></span>
+  <span class="col-4 text-end"><%= payslip.user.full_name %></span>
+</div>
+<div class="row gx-0">
+  <span class="col-4 fw-bolder">Payroll Month</span>
+  <span class="col-4 text-center"></span>
+  <span class="col-4 text-end"><%= payslip.entry.payroll.month.upcase %></span>
+</div>
+<br>
+<div class="row gx-0">
+  <span class="col-4 fw-bolder">Basic Pay</span>
+  <span class="col-4"></span>
+  <span class="col-4 text-end"><%= payslip.entry.basic_pay.format %></span>
+</div>
+<div class="row gx-0 border-bottom">
+  <span class="col-4 fw-bolder">Absences</span>
+  <span class="col-4 text-center"><%= payslip.entry.absences %></span>
+  <span class="col-4 text-end"><%= payslip.entry.leave_without_pay.format %></span>
+</div>
+<div class="row gx-0">
+  <span class="col-4"></span>
+  <span class="col-4 text-center"></span>
+  <span class="col-4 text-end"><b class="me-2">Gross:</b><%= payslip.entry.gross.format %></span>
+</div>
+<br>
+<i>DEDUCTIONS</i>
+<% payslip.entry.deductions.each do |deduction| %>
+  <div class="row gx-0">
+    <span class="col-4 fw-bolder"><%= deduction.name %></span>
+    <span class="col-4 text-center"></span>
+    <span class="col-4 text-end"><%= deduction.amount.format %></span>
+  </div>
+<% end %>
+<div class="row gx-0 border-top">
+  <span class="col-4"></span>
+  <span class="col-4 text-center"></span>
+  <span class="col-4 text-end"><b class="me-2">Total Deductions:</b><%= payslip.entry.total_deductions.format %></span>
+</div>
+<div class="row gx-0">
+  <span class="col-4"></span>
+  <span class="col-4 text-center"></span>
+  <span class="col-4 text-end"><b class="me-2">Net:</b><%= payslip.entry.net.format %></span>
+</div>

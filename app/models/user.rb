@@ -7,6 +7,8 @@ class User < ApplicationRecord
   monetize :salary_cents, :daily_rate_cents, :hourly_rate_cents
   
   validates :first_name, :last_name, :role, :department, :employment_type, presence: true
+  
+  has_many :payslips
 
   enum department: {
     computer_studies: 0,

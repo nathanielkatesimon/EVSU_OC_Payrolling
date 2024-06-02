@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  root "payrolls#index"
+  root "payslips#index"
   devise_for :users, path: 'auth'
 
   get '/terms_of_use_and_privacy_statement' => 'static_pages#terms_of_use_and_privacy_statement', as: 'terms_of_use_and_privacy_statement'
@@ -18,4 +18,5 @@ Rails.application.routes.draw do
   resources :cos_entries
   resources :regular_entries
   resources :profile, only: %i[index update]
+  resources :payslips, only: %i[index show]
 end
