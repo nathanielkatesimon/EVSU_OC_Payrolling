@@ -7,5 +7,11 @@ class PayslipsController < ApplicationController
 
   def show
     @payslip = Payslip.find(params[:id])
+    set_policy!
   end
+
+  private
+    def set_policy!
+      authorize @payslip, policy_class: PayslipsControllerPolicy
+    end
 end

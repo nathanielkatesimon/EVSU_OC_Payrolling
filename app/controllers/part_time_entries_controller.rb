@@ -1,6 +1,7 @@
 class PartTimeEntriesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_part_time_entry, only: %i[ edit update destroy ]
+  before_action :set_policy!
 
   def new
     @payroll = Payroll.find(params[:payroll_id])
@@ -52,5 +53,9 @@ class PartTimeEntriesController < ApplicationController
         :user_id, :rate, :total_rendered_hours, :payroll_id,
         deductions_attributes: [:id, :name, :amount, :_destroy]
       )
+    end
+
+    def set_policy!
+      authorize nil, policy_class: PartTimeEntriesControllerPolicy
     end
 end

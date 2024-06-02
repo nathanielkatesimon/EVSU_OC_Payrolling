@@ -31,7 +31,7 @@
         <td><%=entry.total_deductions.format%></td>
         <td><%=entry.net.format%></td>
         <td>
-          <% if payroll.pending? %>
+          <% if payroll.pending? && Payroll.controller_policy(current_user).edit? %>
             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
               Action
             </button>

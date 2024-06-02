@@ -1,6 +1,7 @@
 class PayrollsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_payroll, only: %i[ show update destroy ada ]
+  before_action :set_policy!
 
   def ada
     @entries = case @payroll.for
@@ -67,5 +68,9 @@ class PayrollsController < ApplicationController
       month = params.dig(:payroll, :month)
       ffor = params.dig(:payroll, :for)
       Payroll.where(month: month, for: ffor).count + 1
+    end
+
+    def set_policy!
+      authorize nil, policy_class: PayrollsControllerPolicy
     end
 end

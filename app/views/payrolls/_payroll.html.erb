@@ -12,7 +12,7 @@
         <%= link_to "View", payroll, class: "dropdown-item" %>
       </li>
       <li>
-        <%= button_to "Delete", payroll_path(payroll), method: :delete, class: "dropdown-item", data: { turbo_confirm: "Are you sure?" } %>
+        <%= button_to "Delete", payroll_path(payroll), method: :delete, class: "dropdown-item", data: { turbo_confirm: "Are you sure?" } if Payroll.controller_policy(current_user).destroy? %>
       </li>
     </ul>
   </td>

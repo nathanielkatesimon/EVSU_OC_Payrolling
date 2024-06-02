@@ -1,6 +1,7 @@
 class CosEntriesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_cos_entry, only: %i[ edit update destroy ]
+  before_action :set_policy!
 
   def new
     @payroll = Payroll.find(params[:payroll_id])
@@ -52,5 +53,9 @@ class CosEntriesController < ApplicationController
         :user_id, :rate, :total_no_of_worked_days, :payroll_id, :total_late_or_undertime, :total_overtime_hours,
         deductions_attributes: [:id, :name, :amount, :_destroy]
       )
+    end
+
+    def set_policy!
+      authorize nil, policy_class: CosEntriesControllerPolicy
     end
 end

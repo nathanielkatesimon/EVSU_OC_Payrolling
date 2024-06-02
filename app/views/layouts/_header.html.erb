@@ -10,7 +10,7 @@
           <%= link_to "Payslips", payslips_path, class: "nav-link" %>
         </li>
         <li class="nav-item">
-          <%= link_to "Payrolls", payrolls_path, class: "nav-link" %>
+          <%= link_to "Payrolls", payrolls_path, class: "nav-link" if Payroll.controller_policy(current_user).index? %>
         </li>
         <li class="nav-item">
           <%= link_to "Users", users_path, class: "nav-link" if User.controller_policy(current_user).index? %>

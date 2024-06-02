@@ -1,5 +1,6 @@
 class ProfileController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_policy!
 
   def index; end
 
@@ -29,5 +30,9 @@ class ProfileController < ApplicationController
         profile_params.delete(:current_password)
         current_user.update(profile_params)
       end
+    end
+
+    def set_policy!
+      authorize current_user, policy_class: ProfileControllerPolicy
     end
 end
