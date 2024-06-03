@@ -7,8 +7,11 @@ class User < ApplicationRecord
   validates :first_name, :last_name, :role, :department, :employment_type, presence: true
 
   monetize :basic_pay_cents, :hourly_rate_cents, :daily_rate_cents
-  
+
   has_many :payslips
+  has_many :deductions, as: :deductable
+  
+  accepts_nested_attributes_for :deductions, reject_if: ->(attributes){ attributes['amount'].blank? || attributes['name'].blank? }, allow_destroy: true
 
   enum department: {
     computer_studies: 0,

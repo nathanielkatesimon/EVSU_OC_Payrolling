@@ -1,45 +1,35 @@
 class PartTimeEntriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_part_time_entry, only: %i[ edit update destroy ]
+  before_action :set_part_time_entry
   before_action :set_policy!
 
-  def new
-    @payroll = Payroll.find(params[:payroll_id])
-    @part_time_entry = PartTimeEntry.new(payroll: @payroll)
-    @part_time_entry.deductions.build
-  end
-
-  def create
-    @part_time_entry = PartTimeEntry.new(part_time_entry_params)
+  def approve
     respond_to do |format|
-      if @part_time_entry.save
-        format.html { redirect_to @part_time_entry.payroll, notice: 'Part time entry was successfully created.' }
+      if @part_time_entry.update(included: true)
+        format.json { render json: { "success": true } }
       else
-        format.html { render :new, status: :see_other }
+        format.json { render json: { "success": false } }
       end
     end
   end
 
-  def update
+  def reject
     respond_to do |format|
-      if @part_time_entry.update(part_time_entry_params)
-        format.html { redirect_to @part_time_entry.payroll, notice: 'Part time entry was successfully updated.' }
+      if @part_time_entry.update(included: false)
+        format.json { render json: { "success": true } }
       else
-        format.html { render :edit, status: :see_other }
+        format.json { render json: { "success": false } }
       end
     end
   end
 
-  def edit
-    if @part_time_entry.deductions.blank?
-      @part_time_entry.deductions.build
-    end
-  end
-
-  def destroy
-    @part_time_entry.destroy
+  def calculate
     respond_to do |format|
-      format.html { redirect_to @part_time_entry.payroll, notice: 'Part time entry was successfully destroyed.' }
+      if @part_time_entry.update(total_rendered_hours: params[:total_rendered_hours])
+        format.json { render json: { "success": true, "net": @part_time_entry.net.format, "gross": @part_time_entry.gross.format } }
+      else
+        format.json { render json: { "success": false } }
+      end
     end
   end
 
@@ -48,14 +38,7 @@ class PartTimeEntriesController < ApplicationController
       @part_time_entry = PartTimeEntry.find(params[:id])
     end
 
-    def part_time_entry_params
-      params.require(:part_time_entry).permit(
-        :user_id, :rate, :total_rendered_hours, :payroll_id,
-        deductions_attributes: [:id, :name, :amount, :_destroy]
-      )
-    end
-
     def set_policy!
-      authorize nil, policy_class: PartTimeEntriesControllerPolicy
+      authorize @part_time_entry, policy_class: PartTimeEntriesControllerPolicy
     end
 end
