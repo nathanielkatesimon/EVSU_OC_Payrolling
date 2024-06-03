@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   
   validates :first_name, :last_name, :role, :department, :employment_type, presence: true
+
+  monetize :basic_pay_cents, :hourly_rate_cents, :daily_rate_cents
   
   has_many :payslips
 
@@ -28,7 +30,7 @@ class User < ApplicationRecord
     disbursing: 2,
     employee: 3
   }
-  
+
   def full_name
     "#{first_name} #{last_name}"
   end

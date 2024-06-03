@@ -24,3 +24,28 @@
     <strong>Email: </strong><span><%= @user.email %></span>
   </div>
 </div>
+<br><br>
+<h3>Salary Information</h3>
+<hr>
+<% if @user.regular? %>
+  <div class="row gx-0 mb-2">
+    <div class="col-12 col-lg-6">
+      <strong>Basic Pay: </strong><span><%= @user.basic_pay.format %></span>
+    </div>
+    <div class="col-12 col-lg-6">
+      <strong>Salary Grade: </strong><span><%= @user.salary_grade %></span>
+    </div>
+  </div>
+<% elsif @user.part_time? %>
+  <div class="row gx-0 mb-2">
+    <div class="col-12 col-lg-6">
+      <strong>Hourly Rate: </strong><span><%= @user.hourly_rate.format %></span>
+    </div>
+  </div>
+<% elsif @user.cos? %>
+  <div class="row gx-0 mb-2">
+    <div class="col-12 col-lg-6">
+      <strong>Daily Rate: </strong><span><%= @user.daily_rate.format %></span>
+    </div>
+  </div>
+<% end %>

@@ -49,7 +49,7 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user)
       .permit(
-        :email, :password, :first_name, :last_name, :role, :department, :employment_type, :bank_acct_no
+        :email, :password, :first_name, :last_name, :role, :department, :employment_type, :bank_acct_no, :basic_pay, :salary_grade, :hourly_rate, :daily_rate
       ).compact_blank!
     end
 

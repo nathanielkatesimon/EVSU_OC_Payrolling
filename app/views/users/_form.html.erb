@@ -1,4 +1,4 @@
-<%= form_with model: user do |form| %>
+<%= form_with model: user, data: { controller: "users--create" } do |form| %>
   
   <div class="mb-4">
     <%= form.label :first_name, class: "required fs-6 fw-bold" %>
@@ -17,7 +17,25 @@
 
   <div class="mb-4">
     <%= form.label :employment_type, class: "required fs-6 fw-bold" %>
-    <%= form.select :employment_type, enum_to_options(User.employment_types), {}, class: 'form-control form-control-sm' %>
+    <%= form.select :employment_type, enum_to_options(User.employment_types), {}, class: 'form-control form-control-sm', data: { action: "input->users--create#displayCorrespondingSalaryForm", users__create_target: "employeeTypeSelection" } %>
+  </div>
+
+  <div class="mb-4 d-none" data-users--create-target="regularsSalaryForm" >
+    <%= form.label :salary_grade, class: "require  fs-6 fw-bold" %>
+    <%= form.number_field :salary_grade, class: "form-control form-control-sm mb-4", step: 1 %>
+  
+    <%= form.label :basic_pay, class: "require  fs-6 fw-bold" %>
+    <%= form.number_field :basic_pay, class: "form-control form-control-sm", step: 0.01 %>
+  </div>
+
+  <div class="mb-4 d-none" data-users--create-target="cosSalaryForm">
+    <%= form.label :daily_rate, class: "require fs-6 fw-bold" %>
+    <%= form.number_field :daily_rate, class: "form-control form-control-sm", step: 0.01 %>
+  </div>
+
+  <div class="mb-4 d-none" data-users--create-target="partTimeSalaryForm">
+    <%= form.label :hourly_rate, class: "require fs-6 fw-bold" %>
+    <%= form.number_field :hourly_rate, class: "form-control form-control-sm", step: 0.01%>
   </div>
   
   <div class="mb-4">
