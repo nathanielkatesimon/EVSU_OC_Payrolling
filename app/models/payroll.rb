@@ -20,6 +20,17 @@ class Payroll < ApplicationRecord
   end
 
   private
+    def entry_type
+      @entry_type ||= case self.for
+                      when "part_time"
+                        :part_time_entries
+                      when "cos"
+                        :cos_entries
+                      when "regular"
+                        :regular_entries
+                      end
+    end
+
     def user_type
       @user_type ||= case self.for
                     when "part_time"
@@ -34,52 +45,22 @@ class Payroll < ApplicationRecord
     def generate_payslips
       return unless status == "completed"
 
-      key = case self.for
-            when "part_time"
-              :part_time_entries
-            when "cos"
-              :cos_entries
-            when "regular"
-              :regular_entries
-            end
-
-      self.send(key).each do |entry|
+      self.send(entry_type).each do |entry|
         Payslip.find_or_create_by(entry: entry, user_id: entry.user_id)
       end
     end
 
     def clear_excluded_entries
       return unless status == "forwarded_to_accounting"
-      
 
-      key = case self.for
-      when "part_time"
-        :part_time_entries
-      when "cos"
-        :cos_entries
-      when "regular"
-        :regular_entries
-      end
-
-      self.send(key).where(included: false).each do |entry|
+      self.send(entry_type).where(included: false).each do |entry|
         entry.destroy
       end
     end
 
     def create_entries
-      if self.for == "part_time"
-        user_type = :part_time
-        entry_type = :part_time_entries
-      elsif self.for == "cos"
-        user_type = :cos
-        entry_type = :cos_entries
-      elsif self.for == "regular"
-        user_type = :regular
-        entry_type = :regular_entries
-      end
-      
       User.send(user_type).each do |user|
-        self.send(entry_type).find_or_create_by(user: user, total_rendered_hours: 0)
+        self.send(entry_type).find_or_create_by(user: user)
       end
     end
 end

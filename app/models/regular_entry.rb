@@ -2,12 +2,6 @@ class RegularEntry < ApplicationRecord
   belongs_to :user
   belongs_to :payroll
 
-  has_many :deductions, as: :deductable
-
-  accepts_nested_attributes_for :deductions, reject_if: ->(attributes){ attributes['amount'].blank? || attributes['name'].blank? }, allow_destroy: true
-
-  monetize :basic_pay_cents
-
   def available_users
     used_ids = payroll.regular_entries.pluck(:user_id)
     User.where.not(id: used_ids)
@@ -19,6 +13,20 @@ class RegularEntry < ApplicationRecord
 
   def leave_without_pay
     @leave_without_pay ||= absences * daily_rate
+  end
+
+  def basic_pay
+    @basic_pay ||= user.basic_pay
+  end
+
+  def deductions_hash
+    total_deductions if @deductions_hash.nil?
+
+    @deductions_hash
+  end
+
+  def deductions
+    @deductions ||= user.deductions
   end
 
   def gross
@@ -33,8 +41,12 @@ class RegularEntry < ApplicationRecord
     return @total_deductions unless @total_deductions.nil?
     
     @total_deductions = Money.new(0)
+    @deductions_hash = {}
 
-    deductions.each { |deduction| @total_deductions = @total_deductions + deduction.amount }
+    deductions.each do |deduction|
+      @total_deductions = @total_deductions + deduction.amount
+      @deductions_hash[deduction.name] = deduction.amount.format
+    end
 
     @total_deductions
   end

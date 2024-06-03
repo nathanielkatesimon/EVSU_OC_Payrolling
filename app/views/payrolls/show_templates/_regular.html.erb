@@ -2,52 +2,63 @@
   <table class="table">
     <thead>
       <tr>
+        <% if payroll.pending? %>
+          <th></th>
+        <% end %>
         <th>User</th>
+        <th>SG</th>
         <th>Basic Pay</th>
-        <th>Abscences/LWOP (Days)</th>
-        <th>Absences/LWOP</th>
+        <th>Absents (Days)</th>
+        <th>Absents</th>
         <th>Gross</th>
-        <th>Deductions</th>
+        <% payroll.deduction_types.each do |deduction_type| %>
+          <th><%= deduction_type %></th>
+        <% end %>
         <th>Total deductions</th>
         <th>Net</th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
       <% payroll.regular_entries.each do |entry| %>
-        <tr>
+        <tr data-controller="regular-entries">
+        <% if payroll.pending? %><td>
+          <div class="form-check">
+            <input class="form-check-input" 
+                    type="checkbox" 
+                    value="" 
+                    id="flexCheckDefault"
+                    data-controller="entry-inclusion" 
+                    data-entry-type="regular" 
+                    data-entry-id="<%= entry.id %>"
+                    data-authenticity-token="<%= form_authenticity_token %>"
+                    data-action="input->entry-inclusion#updateEntryInclusion"
+                    <%= 'checked' if entry.included %>
+            >
+          </div>
+        </td><% end %>
         <td><%=entry.user.full_name%></td>
+        <td><%=entry.user.salary_grade%></td>
         <td><%=entry.basic_pay.format%></td>
-        <td><%=entry.absences%></td>
-        <td><%=entry.leave_without_pay.format%></td>
-        <td><%=entry.gross.format%></td>
         <td>
-          <ul class="p-0">
-            <% entry.deductions.each do |deduction| %>
-              <li><%= deduction.name %> - <%= deduction.amount.format %></li>
-            <% end %>
-          </ul>
-        </td>
-        <td><%=entry.total_deductions.format%></td>
-        <td><%=entry.net.format%></td>
-        <td>
-          <% if payroll.pending? && Payroll.controller_policy(current_user).edit? %>
-            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
-              Action
-            </button>
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm" 
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.absences%>">
+          <% else %>
+            <%= entry.absences %>
           <% end %>
-          <ul class="dropdown-menu">
-            <li>
-              <%= link_to "Edit", edit_regular_entry_path(entry), class: "dropdown-item" if payroll.pending? %>
-            </li>
-            <li>
-              <%= button_to "Delete", regular_entry_path(entry), method: :delete, class: "dropdown-item", data: { turbo_confirm: "Are you sure?" } if payroll.pending? %>
-            </li>
-          </ul>
         </td>
+        <td data-regular-entries-target="absents"><%=entry.leave_without_pay.format%></td>
+        <td data-regular-entries-target="gross"><%=entry.gross.format%></td>
+        
+        <% payroll.deduction_types.each do |deduction_type| %>
+          <td><%= entry.deductions_hash[deduction_type] %></td>
+        <% end %>
+
+        <td><%=entry.total_deductions.format%></td>
+        <td data-regular-entries-target="net"><%=entry.net.format%></td>
         </tr>
       <% end %>
     </tbody>
   </table>
-  <div><%= link_to "New entry", new_regular_entry_path(payroll_id: payroll.id), class: "btn btn-primary" if payroll.pending? %></div>
 </div>

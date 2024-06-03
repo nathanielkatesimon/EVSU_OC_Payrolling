@@ -1,44 +1,35 @@
 class RegularEntriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_regular_entry, only: %i[ edit update destroy ]
+  before_action :set_regular_entry
+  before_action :set_policy
 
-  def new
-    @payroll = Payroll.find(params[:payroll_id])
-    @regular_entry = RegularEntry.new(payroll: @payroll)
-    @regular_entry.deductions.build
-  end
-
-  def create
-    @regular_entry = RegularEntry.new(part_time_entry_params)
+  def approve
     respond_to do |format|
-      if @regular_entry.save
-        format.html { redirect_to @regular_entry.payroll, notice: 'Regular entry was successfully created.' }
+      if @regular_entry.update(included: true)
+        format.json { render json: { "success": true } }
       else
-        format.html { render :new, status: :see_other }
+        format.json { render json: { "success": false } }
       end
     end
   end
 
-  def update
+  def reject
     respond_to do |format|
-      if @regular_entry.update(part_time_entry_params)
-        format.html { redirect_to @regular_entry.payroll, notice: 'Regular entry was successfully updated.' }
+      if @regular_entry.update(included: false)
+        format.json { render json: { "success": true } }
       else
-        format.html { render :edit, status: :see_other }
+        format.json { render json: { "success": false } }
       end
     end
   end
 
-  def edit
-    if @regular_entry.deductions.blank?
-      @regular_entry.deductions.build
-    end
-  end
-
-  def destroy
-    @regular_entry.destroy
+  def calculate
     respond_to do |format|
-      format.html { redirect_to @regular_entry.payroll, notice: 'Regular entry was successfully destroyed.' }
+      if @regular_entry.update(absences: params[:absences])
+        format.json { render json: { "success": true, "net": @regular_entry.net.format, "gross": @regular_entry.gross.format, "absents": @regular_entry.leave_without_pay.format } }
+      else
+        format.json { render json: { "success": false } }
+      end
     end
   end
 
@@ -47,10 +38,7 @@ class RegularEntriesController < ApplicationController
       @regular_entry = RegularEntry.find(params[:id])
     end
 
-    def part_time_entry_params
-      params.require(:regular_entry).permit(
-        :user_id, :basic_pay, :absences, :payroll_id,
-        deductions_attributes: [:id, :name, :amount, :_destroy]
-      )
+    def set_policy
+      authorize @regular_entry, policy_class: RegularEntriesControllerPolicy
     end
 end

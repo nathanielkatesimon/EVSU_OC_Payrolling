@@ -10,16 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_03_134242) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_03_170225) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "cos_entries", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.integer "rate_cents"
-    t.decimal "total_no_of_worked_days", precision: 10, scale: 2
-    t.decimal "total_late_or_undertime", precision: 10, scale: 2
-    t.decimal "total_overtime_hours", precision: 10, scale: 2
+    t.decimal "total_no_of_worked_days", precision: 10, scale: 2, default: "0.0"
+    t.decimal "total_late_or_undertime", precision: 10, scale: 2, default: "0.0"
+    t.decimal "total_overtime_hours", precision: 10, scale: 2, default: "0.0"
     t.bigint "payroll_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -39,7 +38,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_03_134242) do
 
   create_table "part_time_entries", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.decimal "total_rendered_hours", precision: 10, scale: 2
+    t.decimal "total_rendered_hours", precision: 10, scale: 2, default: "0.0"
     t.bigint "payroll_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -69,11 +68,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_03_134242) do
 
   create_table "regular_entries", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.integer "basic_pay_cents"
     t.bigint "payroll_id", null: false
-    t.decimal "absences", precision: 10, scale: 2
+    t.decimal "absences", precision: 10, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "included", default: false
     t.index ["payroll_id"], name: "index_regular_entries_on_payroll_id"
     t.index ["user_id"], name: "index_regular_entries_on_user_id"
   end
