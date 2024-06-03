@@ -3,7 +3,7 @@ class Payroll < ApplicationRecord
   has_many :cos_entries, dependent: :destroy
   has_many :regular_entries, dependent: :destroy
   after_update :generate_payslips
-  after_create :clear_excluded_entries
+  after_update :clear_excluded_entries
   after_create :create_entries
 
   validates :month, :batch, :for, :status, presence: true
