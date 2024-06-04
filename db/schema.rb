@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_03_170225) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_04_010049) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_03_170225) do
     t.bigint "payroll_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "included", default: false
     t.index ["payroll_id"], name: "index_cos_entries_on_payroll_id"
     t.index ["user_id"], name: "index_cos_entries_on_user_id"
   end

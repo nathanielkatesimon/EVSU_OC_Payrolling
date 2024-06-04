@@ -39,7 +39,7 @@ class RegularEntry < ApplicationRecord
 
   def total_deductions
     return @total_deductions unless @total_deductions.nil?
-    
+
     @total_deductions = Money.new(0)
     @deductions_hash = {}
 

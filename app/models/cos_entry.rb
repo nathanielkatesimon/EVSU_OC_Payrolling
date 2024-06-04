@@ -2,15 +2,23 @@ class CosEntry < ApplicationRecord
   belongs_to :user
   belongs_to :payroll
 
-  has_many :deductions, as: :deductable
-
-  accepts_nested_attributes_for :deductions, reject_if: ->(attributes){ attributes['amount'].blank? || attributes['name'].blank? }, allow_destroy: true
-
-  monetize :rate_cents
-
   def available_users
     used_ids = payroll.cos_entries.pluck(:user_id)
     User.where.not(id: used_ids)
+  end
+
+  def rate
+    @rate ||= user.daily_rate
+  end
+
+  def deductions
+    @deductions ||= user.deductions
+  end
+
+  def deductions_hash
+    total_deductions if @deductions_hash.nil?
+
+    @deductions_hash
   end
 
   def gross_without_adjustments

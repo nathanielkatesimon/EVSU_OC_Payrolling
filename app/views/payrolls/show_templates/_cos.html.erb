@@ -2,6 +2,9 @@
   <table class="table">
     <thead>
       <tr>
+        <% if payroll.pending? %>
+          <th></th>
+        <% end %>
         <th>User</th>
         <th>Rate</th>
         <th>Total # days</th>
@@ -13,20 +16,58 @@
         <th>Deductions</th>
         <th>Total Deductions</th>
         <th>Net</th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
       <% payroll.cos_entries.each do |entry| %>
-        <tr>
+        <tr data-controller="cos-entries">
+        <% if payroll.pending? %><td>
+          <div class="form-check">
+            <input class="form-check-input" 
+                    type="checkbox" 
+                    value="" 
+                    id="flexCheckDefault"
+                    data-controller="entry-inclusion" 
+                    data-entry-type="cos" 
+                    data-entry-id="<%= entry.id %>"
+                    data-authenticity-token="<%= form_authenticity_token %>"
+                    data-action="input->entry-inclusion#updateEntryInclusion"
+                    <%= 'checked' if entry.included %>
+            >
+          </div>
+        </td><% end %>
         <td><%=entry.user.full_name%></td>
         <td><%=entry.rate.format%></td>
-        <td><%=entry.total_no_of_worked_days%></td>
-        <td><%=entry.total_late_or_undertime%></td>
-        <td><%=entry.late_or_undertime_deduction.format%></td>
-        <td><%=entry.total_overtime_hours%></td>
-        <td><%=entry.overtime_comp.format%></td>
-        <td><%=entry.gross.format%></td>
+        <td>
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm" 
+                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="total_no_of_days"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.total_no_of_worked_days%>">
+          <% else %>
+            <%=entry.total_no_of_worked_days%>
+          <% end %>
+        </td>
+        <td>
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm" 
+                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="undertime"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.total_late_or_undertime%>">
+          <% else %>
+            <%=entry.total_late_or_undertime%>
+          <% end %>
+        </td>
+        <td data-cos-entries-target="undertime"><%=entry.late_or_undertime_deduction.format%></td>
+        <td>
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm" 
+                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="overtime"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.total_overtime_hours%>">
+          <% else %>
+            <%=entry.total_overtime_hours%>
+          <% end %>
+        </td>
+        <td data-cos-entries-target="overtime"><%=entry.overtime_comp.format%></td>
+        <td data-cos-entries-target="gross"><%=entry.gross.format%></td>
         <td>
           <ul class="p-0">
             <% entry.deductions.each do |deduction| %>
@@ -35,25 +76,9 @@
           </ul>
         </td>
         <td><%=entry.total_deductions.format%></td>
-        <td><%=entry.net.format%></td>
-        <td>
-          <% if payroll.pending? && Payroll.controller_policy(current_user).edit? %>
-            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-coreui-toggle="dropdown" aria-expanded="false">
-              Action
-            </button>
-          <% end %>
-          <ul class="dropdown-menu">
-            <li>
-              <%= link_to "Edit", edit_cos_entry_path(entry), class: "dropdown-item" if payroll.pending? %>
-            </li>
-            <li>
-              <%= button_to "Delete", cos_entry_path(entry), method: :delete, class: "dropdown-item", data: { turbo_confirm: "Are you sure?" } if payroll.pending? %>
-            </li>
-          </ul>
-        </td>
+        <td data-cos-entries-target="net"><%=entry.net.format%></td>
         </tr>
       <% end %>
     </tbody>
   </table>
-  <div><%= link_to "New entry", new_cos_entry_path(payroll_id: payroll.id), class: "btn btn-primary" if payroll.pending? %></div>
 </div>

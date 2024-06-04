@@ -15,6 +15,9 @@ export default class extends Controller {
     else if (entryType == "regular") {
       url = "/regular_entries/" + (this.element.checked ? "approve/" : "reject/") + entryId
     }
+    else if (entryType == "cos") {
+      url = "/cos_entries/" + (this.element.checked ? "approve/" : "reject/") + entryId
+    }
 
     fetch(url, { method: "PATCH", body: JSON.stringify(data), headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfMetaTag } })
   }

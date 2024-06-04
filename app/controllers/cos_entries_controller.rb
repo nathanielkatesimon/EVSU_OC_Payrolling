@@ -1,45 +1,35 @@
 class CosEntriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_cos_entry, only: %i[ edit update destroy ]
+  before_action :set_cos_entry
   before_action :set_policy!
 
-  def new
-    @payroll = Payroll.find(params[:payroll_id])
-    @cos_entry = CosEntry.new(payroll: @payroll)
-    @cos_entry.deductions.build
-  end
-
-  def create
-    @cos_entry = CosEntry.new(cos_entry_params)
+  def approve
     respond_to do |format|
-      if @cos_entry.save
-        format.html { redirect_to @cos_entry.payroll, notice: 'COS entry was successfully created.' }
+      if @cos_entry.update(included: true)
+        format.json { render json: { "success": true } }
       else
-        format.html { render :new, status: :see_other }
+        format.json { render json: { "success": false } }
       end
     end
   end
 
-  def destroy
-    @cos_entry.destroy
+  def reject
     respond_to do |format|
-      format.html { redirect_to @cos_entry.payroll, notice: 'COS entry was successfully destroyed.' }
-    end
-  end
-
-  def update
-    respond_to do |format|
-      if @cos_entry.update(cos_entry_params)
-        format.html { redirect_to @cos_entry.payroll, notice: 'COS entry was successfully updated.' }
+      if @cos_entry.update(included: false)
+        format.json { render json: { "success": true } }
       else
-        format.html { render :edit, status: :see_other }
+        format.json { render json: { "success": false } }
       end
     end
   end
 
-  def edit
-    if @cos_entry.deductions.blank?
-      @cos_entry.deductions.build
+  def calculate
+    respond_to do |format|
+      if @cos_entry.update(absences: params[:absences])
+        format.json { render json: { "success": true, "net": @cos_entry.net.format, "gross": @cos_entry.gross.format, "absents": @cos_entry.leave_without_pay.format } }
+      else
+        format.json { render json: { "success": false } }
+      end
     end
   end
 
@@ -48,14 +38,7 @@ class CosEntriesController < ApplicationController
       @cos_entry = CosEntry.find(params[:id])
     end
 
-    def cos_entry_params
-      params.require(:cos_entry).permit(
-        :user_id, :rate, :total_no_of_worked_days, :payroll_id, :total_late_or_undertime, :total_overtime_hours,
-        deductions_attributes: [:id, :name, :amount, :_destroy]
-      )
-    end
-
     def set_policy!
-      authorize nil, policy_class: CosEntriesControllerPolicy
+      authorize @cos_entry, policy_class: CosEntriesControllerPolicy
     end
 end
