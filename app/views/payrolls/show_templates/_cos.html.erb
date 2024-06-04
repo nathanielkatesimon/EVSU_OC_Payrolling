@@ -12,8 +12,9 @@
         <th>Late/Undertime</th>
         <th>Total overtime hrs.</th>
         <th>Overtime</th>
-        <th>Gross</th>
-        <th>Deductions</th>
+        <% payroll.deduction_types.each do |deduction_type| %>
+          <th><%= deduction_type %></th>
+        <% end %>
         <th>Total Deductions</th>
         <th>Net</th>
       </tr>
@@ -41,7 +42,7 @@
         <td>
           <% if payroll.pending? %>
             <input class="form-control form-control-sm" 
-                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="total_no_of_days"
+                    data-action="input->cos-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="total_no_of_worked_days"
                     data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.total_no_of_worked_days%>">
           <% else %>
             <%=entry.total_no_of_worked_days%>
@@ -49,8 +50,8 @@
         </td>
         <td>
           <% if payroll.pending? %>
-            <input class="form-control form-control-sm" 
-                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="undertime"
+            <input class="form-control form-control-sm"
+                    data-action="input->cos-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="total_late_or_undertime"
                     data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.total_late_or_undertime%>">
           <% else %>
             <%=entry.total_late_or_undertime%>
@@ -60,7 +61,7 @@
         <td>
           <% if payroll.pending? %>
             <input class="form-control form-control-sm" 
-                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="overtime"
+                    data-action="input->cos-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="total_overtime_hours"
                     data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.total_overtime_hours%>">
           <% else %>
             <%=entry.total_overtime_hours%>
@@ -68,14 +69,14 @@
         </td>
         <td data-cos-entries-target="overtime"><%=entry.overtime_comp.format%></td>
         <td data-cos-entries-target="gross"><%=entry.gross.format%></td>
-        <td>
-          <ul class="p-0">
-            <% entry.deductions.each do |deduction| %>
-              <li><%= deduction.name %> - <%= deduction.amount.format %></li>
-            <% end %>
-          </ul>
-        </td>
-        <td><%=entry.total_deductions.format%></td>
+        
+        <% payroll.deduction_types.each do |deduction_type| %>
+          <td><%= entry.deductions_hash[deduction_type] %></td>
+        <% end %>
+
+        <% if entry.total_deductions != 0 %>
+          <td><%=entry.total_deductions.format%></td>
+        <% end %>
         <td data-cos-entries-target="net"><%=entry.net.format%></td>
         </tr>
       <% end %>
