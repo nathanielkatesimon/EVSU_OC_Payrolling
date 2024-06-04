@@ -1,5 +1,5 @@
 <div class="d-flex">
-  <%= link_to "New", new_payroll_path, class: "btn btn-primary ms-auto"%>
+  <%= link_to "New", new_payroll_path, class: "btn btn-primary ms-auto" if Payroll.controller_policy(current_user).new? %>
 </div>
 
 <div class="table-responsive">

@@ -21,12 +21,12 @@
         <tr data-controller="part-time-entries">
         <% if payroll.pending? %><td>
           <div class="form-check">
-            <input class="form-check-input" 
-                    type="checkbox" 
-                    value="" 
+            <input class="form-check-input"
+                    type="checkbox"
+                    value=""
                     id="flexCheckDefault"
-                    data-controller="entry-inclusion" 
-                    data-entry-type="part_time" 
+                    data-controller="entry-inclusion"
+                    data-entry-type="part_time"
                     data-entry-id="<%= entry.id %>"
                     data-authenticity-token="<%= form_authenticity_token %>"
                     data-action="input->entry-inclusion#updateEntryInclusion"
@@ -38,7 +38,7 @@
         <td><%=entry.rate.format%></td>
         <td>
           <% if payroll.pending? %>
-            <input class="form-control form-control-sm" 
+            <input class="form-control form-control-sm"
                     data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>"
                     data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.total_rendered_hours %>">
           <% else %>
@@ -46,14 +46,12 @@
           <% end %>
         </td>
         <td data-part-time-entries-target="gross"><%=entry.gross.format%></td>
-        
+
         <% payroll.deduction_types.each do |deduction_type| %>
           <td><%= entry.deductions_hash[deduction_type] %></td>
         <% end %>
 
-        <% if entry.total_deductions != 0 %>
-          <td><%=entry.total_deductions.format%></td>
-        <% end %>
+        <td><%=entry.total_deductions.format%></td>
         <td data-part-time-entries-target="net"><%=entry.net.format%></td>
         </tr>
       <% end %>

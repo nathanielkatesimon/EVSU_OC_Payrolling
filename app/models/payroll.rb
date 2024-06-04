@@ -15,6 +15,17 @@ class Payroll < ApplicationRecord
     july: 6, august: 7, september: 8, october: 9, november: 10, december: 11
   }
 
+  def excluded_users
+    return @excluded_users unless @excluded_users.nil?
+    excluded_users_id = Payroll.send(user_type).map(&:users_id).flatten
+    @excluded_users = User.send(user_type).where.not(id: excluded_users_id)
+    @excluded_users
+  end
+
+  def users_id
+    @users_id ||= self.send(entry_type).map(&:user).pluck(:id)
+  end
+
   def deduction_types
     @deduction_types ||= User.includes(:deductions).send(user_type).map { |user| user.deductions.pluck(:name) } .flatten.uniq
   end
@@ -39,7 +50,7 @@ class Payroll < ApplicationRecord
                       :cos
                     when "regular"
                       :regular
-                    end  
+                    end
     end
 
     def generate_payslips
@@ -59,7 +70,9 @@ class Payroll < ApplicationRecord
     end
 
     def create_entries
-      User.send(user_type).each do |user|
+      collection = batch > 1 ? excluded_users : User.send(user_type)
+
+      collection.each do |user|
         self.send(entry_type).find_or_create_by(user: user)
       end
     end
