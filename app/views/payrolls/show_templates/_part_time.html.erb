@@ -51,7 +51,9 @@
           <td><%= entry.deductions_hash[deduction_type] %></td>
         <% end %>
 
-        <td><%=entry.total_deductions.format%></td>
+        <% if entry.total_deductions != 0 %>
+          <td><%=entry.total_deductions.format%></td>
+        <% end %>
         <td data-part-time-entries-target="net"><%=entry.net.format%></td>
         </tr>
       <% end %>

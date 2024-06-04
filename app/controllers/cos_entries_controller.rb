@@ -25,8 +25,8 @@ class CosEntriesController < ApplicationController
 
   def calculate
     respond_to do |format|
-      if @cos_entry.update(absences: params[:absences])
-        format.json { render json: { "success": true, "net": @cos_entry.net.format, "gross": @cos_entry.gross.format, "absents": @cos_entry.leave_without_pay.format } }
+      if @cos_entry.update(cos_params)
+        format.json { render json: { "success": true, "net": @cos_entry.net.format, "gross": @cos_entry.gross.format, "overtime": @cos_entry.overtime_comp.format, "undertime": @cos_entry.late_or_undertime_deduction.format } }
       else
         format.json { render json: { "success": false } }
       end
@@ -34,6 +34,10 @@ class CosEntriesController < ApplicationController
   end
 
   private
+    def cos_params
+      params.require(:cos_entry).permit(:total_no_of_worked_days, :total_late_or_undertime, :total_overtime_hours).compact_blank!
+    end
+
     def set_cos_entry
       @cos_entry = CosEntry.find(params[:id])
     end
