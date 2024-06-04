@@ -5,6 +5,10 @@
   <% end %>
 <% elsif payroll.forwarded_to_accounting? && current_user.accounting? %>
   <%= form_with model: payroll do |form| %>
+    <%= form.hidden_field :status, value: :pending %>
+    <%= form.submit "Return to HR", class: "btn btn-sm btn-primary ms-auto text-light"%>
+  <% end %>
+  <%= form_with model: payroll do |form| %>
     <%= form.hidden_field :status, value: :ready_for_ada %>
     <%= form.submit "Ready for ADA", class: "btn btn-sm btn-warning ms-auto text-light"%>
   <% end %>

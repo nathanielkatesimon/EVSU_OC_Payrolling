@@ -17,7 +17,7 @@ class Payroll < ApplicationRecord
 
   def excluded_users
     return @excluded_users unless @excluded_users.nil?
-    excluded_users_id = Payroll.send(user_type).map(&:users_id).flatten
+    excluded_users_id = Payroll.send(user_type).where(month: month).map(&:users_id).flatten
     @excluded_users = User.send(user_type).where.not(id: excluded_users_id)
     @excluded_users
   end
@@ -62,7 +62,7 @@ class Payroll < ApplicationRecord
     end
 
     def clear_excluded_entries
-      return unless status == "forwarded_to_accounting"
+      return unless status == "ready_for_ada"
 
       self.send(entry_type).where(included: false).each do |entry|
         entry.destroy

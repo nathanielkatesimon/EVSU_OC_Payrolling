@@ -1,13 +1,22 @@
 class PartTimeEntriesControllerPolicy < ApplicationPolicy
   def approve?
-    user.human_resources? && record.payroll.pending?
+    allowed_user && editable_record
   end
 
   def reject?
-    user.human_resources? && record.payroll.pending?
+    allowed_user && editable_record
   end
 
   def calculate?
-    user.human_resources? && record.payroll.pending?
+    allowed_user && editable_record
   end
+
+  private
+    def allowed_user
+      user.human_resources? || user.accounting?
+    end
+
+    def editable_record
+      record.payroll.pending? || record.payroll.forwarded_to_accounting?
+    end
 end

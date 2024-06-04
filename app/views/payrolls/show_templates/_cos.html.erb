@@ -2,7 +2,7 @@
   <table class="table">
     <thead>
       <tr>
-        <% if payroll.pending? %>
+        <% if payroll.pending? || payroll.forwarded_to_accounting? %>
           <th></th>
         <% end %>
         <th>User</th>
@@ -23,7 +23,7 @@
     <tbody>
       <% payroll.cos_entries.each do |entry| %>
         <tr data-controller="cos-entries">
-        <% if payroll.pending? %><td>
+        <% if payroll.pending? || payroll.forwarded_to_accounting?%><td>
           <div class="form-check">
             <input class="form-check-input"
                     type="checkbox"
