@@ -18,5 +18,8 @@
     <%= form.submit "Create ADA", class: "btn btn-sm btn-success ms-auto text-light"%>
   <% end %>
 <% elsif payroll.completed? %>
-  <%= link_to "View ADA", ada_path(payroll), class: "btn btn-success btn-sm ms-auto text-light" %>
+  <div>
+    <%= button_tag "Print", id: "printBtn", class: "btn btn-secondary btn-sm ms-auto text-light", data: { controller: "payroll-printer", action: "click->payroll-printer#print" } %>
+    <%= link_to "View ADA", ada_path(payroll), id: "viewAdaBtn", class: "btn btn-success btn-sm ms-auto text-light" %>
+  </div>
 <% end %>

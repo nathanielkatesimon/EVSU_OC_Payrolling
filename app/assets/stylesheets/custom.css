@@ -3,3 +3,7 @@
   transition: ease-in-out;
   transition_duration: 300ms;
 }
+
+.print_font{
+  font-size: 9pt;
+}

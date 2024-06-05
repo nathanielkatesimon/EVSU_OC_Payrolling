@@ -1,4 +1,4 @@
-<div class="d-flex gap-2 align-items-center">
+<div id="payroll_title" class="d-flex gap-2 align-items-center">
   <h3 class="me-auto"><%= @payroll.for.humanize %> Payroll for the month of <%= @payroll.month.capitalize %> - Batch <%= @payroll.batch %></h3>
   <%= render partial: "payrolls/payroll_actions", locals: { payroll: @payroll }%>
 </div>
