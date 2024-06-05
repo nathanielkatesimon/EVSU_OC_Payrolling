@@ -110,6 +110,7 @@ GEM
     erubi (1.12.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    humanize (3.1.0)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.0.1)
@@ -266,6 +267,7 @@ DEPENDENCIES
   capybara
   debug
   devise (~> 4.9)
+  humanize
   importmap-rails
   jbuilder
   money-rails (~> 1.15)

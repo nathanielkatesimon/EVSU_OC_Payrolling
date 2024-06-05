@@ -26,7 +26,7 @@ class PartTimeEntriesController < ApplicationController
   def calculate
     respond_to do |format|
       if @part_time_entry.update(part_time_entry_params)
-        format.json { render json: { "success": true, "net": @part_time_entry.net.format, "gross": @part_time_entry.gross.format, "total_rendered_hours": @part_time_entry.total_rendered_hours, "total_deductions": @part_time_entry.total_deductions.format  } }
+        format.json { render json: { "success": true, "net": @part_time_entry.net.format, "gross": @part_time_entry.gross.format, "total_rendered_hours": @part_time_entry.summed_up_no_of_hours, "total_deductions": @part_time_entry.total_deductions.format  } }
       else
         format.json { render json: { "success": false } }
       end
@@ -43,6 +43,6 @@ class PartTimeEntriesController < ApplicationController
     end
 
     def part_time_entry_params
-      params.require(:part_time_entry).permit(:total_rendered_hours, :witholding_tax, :pagibig_ps, :pagibig_mpl, :cfi, :advances)
+      params.require(:part_time_entry).permit(:total_rendered_hours, :prev_rendered_hours, :witholding_tax, :pagibig_ps, :pagibig_mpl, :cfi, :advances)
     end
 end

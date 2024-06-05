@@ -9,6 +9,12 @@ class RegularEntry < ApplicationRecord
            :cfi_cents, :disallowances_cents, :evsu_mpc_cents,
            :salary_lwop_cents, :other_comp_cents
 
+  enum status: { 
+    pending: 0, 
+    forwarded_to_accounting: 1, 
+    ready_for_ada: 2
+  }
+
   def available_users
     used_ids = payroll.regular_entries.pluck(:user_id)
     User.where.not(id: used_ids)

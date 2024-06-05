@@ -4,6 +4,12 @@ class CosEntry < ApplicationRecord
 
   monetize :sss_cents, :pagibig_calamity_cents, :pagibig_contribution_cents
 
+  enum status: { 
+    pending: 0, 
+    forwarded_to_accounting: 1, 
+    ready_for_ada: 2
+  }
+
   def available_users
     used_ids = payroll.cos_entries.pluck(:user_id)
     User.where.not(id: used_ids)

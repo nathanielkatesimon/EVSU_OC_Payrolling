@@ -73,3 +73,5 @@ gem "money-rails", "~> 1.15"
 gem "pundit", "~> 2.3"
 
 gem "pagy", "~> 8.4"
+
+gem 'humanize'

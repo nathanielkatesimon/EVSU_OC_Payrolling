@@ -17,6 +17,6 @@ class PartTimeEntriesControllerPolicy < ApplicationPolicy
     end
 
     def editable_record
-      record.payroll.pending? || record.payroll.forwarded_to_accounting?
+      record.payroll.pending?
     end
 end

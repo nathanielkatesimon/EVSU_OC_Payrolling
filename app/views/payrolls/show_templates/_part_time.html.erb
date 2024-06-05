@@ -16,17 +16,18 @@
       <tr>
         <td class="border-start border-end" style="padding: 5px 10px;"></td>
         <td class="border-start border-end" style="padding: 5px 10px;"></td>
-        <td colspan=3 class="border text-center fw-bold" style="padding: 5px 10px;"></td>
+        <td colspan=4 class="border text-center fw-bold" style="padding: 5px 10px;"></td>
         <td colspan=6 class="border text-center fw-bold" style="padding: 5px 10px;">DEDUCTIONS</td>
         <td class="border-start border-end" style="padding: 5px 10px;"></td>
-        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <% if payroll.completed? %><td class="border-start border-end" style="padding: 5px 10px;"></td><% end %>
       </tr>
   
 
       <tr>
         <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Name</th>
         <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Rate</th>
-        <th class="border" style="padding: 5px 10px;"><%= payroll.month %> <%= payroll.created_at.year %></th>
+        <th class="border" style="padding: 5px 10px;"><%= payroll.prev_month.strftime("%B") %> <%= payroll.created_at.year %></th>
+        <th class="border" style="padding: 5px 10px;"><%= payroll.month.capitalize %> <%= payroll.created_at.year %></th>
         <th class="border" style="padding: 5px 10px;">Total # of hours</th>
         <th class="border" style="padding: 5px 10px;">GROSS AMOUNT</th>
         <th class="border" style="padding: 5px 10px;">TAX WI/HELD</th>
@@ -36,100 +37,33 @@
         <th class="border" style="padding: 5px 10px;">CFI</th>
         <th class="border" style="padding: 5px 10px;">TOTAL DEDUCTIONS</th>
         <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Net Amount Due</th>
-        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">SIGNATURE</th>
+        <% if payroll.completed? %><th class="border-bottom border-start border-end" style="padding: 5px 10px;">SIGNATURE</th><% end %>
       </tr>
     </thead>
     <tbody>
-      <% payroll.part_time_entries.each do |entry| %>
+      <% payroll.part_time_entries.send(entries_to_view_for(current_user, payroll)).each do |entry| %>
         <tr data-controller="part-time-entries">
         <td class="border" style="padding: 5px 10px;">
           <div class="d-flex align-items-center">
-            <% if payroll.pending? || payroll.forwarded_to_accounting? %>
-              <span class="form-check">
-                <input class="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckDefault"
-                        data-controller="entry-inclusion"
-                        data-entry-type="part_time"
-                        data-entry-id="<%= entry.id %>"
-                        data-authenticity-token="<%= form_authenticity_token %>"
-                        data-action="input->entry-inclusion#updateEntryInclusion"
-                        <%= 'checked' if entry.included %>
-                >
-              </span>
-            <% end %>
+            <%= render_checkbox_if_needed(entry, current_user) %>
             <span><%=entry.user.full_name%></span>
           </div>
         <td class="border" style="padding: 5px 10px;"><%=entry.rate.format%></td>
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="total_rendered_hours"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.total_rendered_hours %>">
-          <% else %>
-            <%= entry.total_rendered_hours %>
-          <% end %>
-        </td>
-        <td class="border" style="padding: 5px 10px;" data-part-time-entries-target="total_rendered_hours"><%=entry.total_rendered_hours%></td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :prev_rendered_hours, current_user) %></td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :total_rendered_hours, current_user) %></td>
+        <td class="border" style="padding: 5px 10px;" data-part-time-entries-target="total_rendered_hours"><%=entry.summed_up_no_of_hours%></td>
         <td class="border" style="padding: 5px 10px;" data-part-time-entries-target="gross"><%=entry.gross.format%></td>
-
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="witholding_tax"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.witholding_tax %>">
-          <% else %>
-            <%= entry.witholding_tax %>
-          <% end %>
-        </td>
-
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="pagibig_ps"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.pagibig_ps %>">
-          <% else %>
-            <%= entry.pagibig_ps %>
-          <% end %>
-        </td>
-
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="pagibig_mpl"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.pagibig_mpl %>">
-          <% else %>
-            <%= entry.pagibig_mpl %>
-          <% end %>
-        </td>
-
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="advances"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.advances %>">
-          <% else %>
-            <%= entry.advances %>
-          <% end %>
-        </td>
-
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="cfi"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.cfi %>">
-          <% else %>
-            <%= entry.cfi %>
-          <% end %>
-        </td>
-        
-
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :witholding_tax, current_user) %></td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :pagibig_ps, current_user) %></td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :pagibig_mpl, current_user) %></td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :advances, current_user) %> </td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :cfi, current_user) %></td>
         <td class="border" style="padding: 5px 10px;" data-part-time-entries-target="total_deductions"><%=entry.total_deductions.format%></td>
         <td class="border" style="padding: 5px 10px;" data-part-time-entries-target="net"><%=entry.net.format%></td>
-        <td class="border" style="padding: 5px 10px;"></td>
+        <% if payroll.completed? %><td class="border" style="padding: 5px 10px;"></td><% end %>
         </tr>
       <% end %>
+      <%= render partial: "payrolls/designates_template", locals: { payroll: payroll } if payroll.completed? %>
     </tbody>
   </table>
 </div>

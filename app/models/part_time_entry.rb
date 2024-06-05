@@ -4,6 +4,12 @@ class PartTimeEntry < ApplicationRecord
 
   monetize :witholding_tax_cents, :pagibig_ps_cents, :pagibig_mpl_cents, :advances_cents, :cfi_cents
 
+  enum status: { 
+    pending: 0, 
+    forwarded_to_accounting: 1, 
+    ready_for_ada: 2
+  }
+
   def rate
     @rate ||= user.hourly_rate
   end
@@ -13,8 +19,12 @@ class PartTimeEntry < ApplicationRecord
     User.where.not(id: used_ids)
   end
 
+  def summed_up_no_of_hours
+    @summed_up_no_of_hours ||= (prev_rendered_hours || 0.0) + (total_rendered_hours || 0.0)
+  end
+
   def gross
-    @gross ||= rate * (total_rendered_hours || 0.0)
+    @gross ||= rate * (summed_up_no_of_hours || 0.0)
   end
 
   def net

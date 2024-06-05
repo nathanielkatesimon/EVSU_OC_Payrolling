@@ -1,18 +1,18 @@
 <% if payroll.pending? && current_user.human_resources? %>
   <%= form_with model: payroll do |form| %>
-    <%= form.hidden_field :status, value: :forwarded_to_accounting %>
+    <%= form.hidden_field :action, value: :forward_to_accounting %>
     <%= form.submit "Forward to Accounting", class: "btn btn-info btn-sm ms-auto text-light"%>
   <% end %>
-<% elsif payroll.forwarded_to_accounting? && current_user.accounting? %>
+<% elsif payroll.pending? && current_user.accounting? %>
   <%= form_with model: payroll do |form| %>
-    <%= form.hidden_field :status, value: :pending %>
+    <%= form.hidden_field :action, value: :return_to_hr %>
     <%= form.submit "Return to HR", class: "btn btn-sm btn-primary ms-auto text-light"%>
   <% end %>
   <%= form_with model: payroll do |form| %>
-    <%= form.hidden_field :status, value: :ready_for_ada %>
+    <%= form.hidden_field :action, value: :ready_for_ada %>
     <%= form.submit "Ready for ADA", class: "btn btn-sm btn-warning ms-auto text-light"%>
   <% end %>
-<% elsif payroll.ready_for_ada? && current_user.disbursing? %>
+<% elsif payroll.pending? && current_user.disbursing? %>
   <%= form_with model: payroll do |form| %>
     <%= form.hidden_field :status, value: :completed %>
     <%= form.submit "Create ADA", class: "btn btn-sm btn-success ms-auto text-light"%>

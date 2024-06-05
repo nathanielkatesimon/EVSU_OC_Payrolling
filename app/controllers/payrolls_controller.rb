@@ -37,7 +37,7 @@ class PayrollsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @payroll.update(payroll_params)
+      if update_status_or_entries
         format.html { redirect_to @payroll, notice: 'Payroll was successfully updated.' }
       else
         format.html { render :edit, status: :see_other }
@@ -53,6 +53,20 @@ class PayrollsController < ApplicationController
   end
 
   private
+    def update_status_or_entries
+      action = params.dig(:payroll, :action)
+      
+      if action.nil?
+        @payroll.update(payroll_params)
+      elsif action == "forward_to_accounting"
+        @payroll.forward_selected_entries_to_accounting
+      elsif action == "return_to_hr"
+        @payroll.return_selected_entries_to_hr
+      elsif action == "ready_for_ada"
+        @payroll.ready_selected_entries_for_ada
+      end
+    end
+
     def set_payroll
       @payroll = Payroll.find(params[:id])
     end

@@ -20,7 +20,7 @@
         <td colspan=9 class="border text-center fw-bold" style="padding: 5px 10px;">COMPENSATIONS</td>
         <td colspan=4 class="border text-center fw-bold" style="padding: 5px 10px;">DEDUCTIONS</td>
         <td class="border-start border-end" style="padding: 5px 10px;"></td>
-        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <% if payroll.completed? %><td class="border-start border-end" style="padding: 5px 10px;"></td><% end %>
       </tr>
 
       <tr>
@@ -34,7 +34,7 @@
         <td class="border-start border-end" style="padding: 5px 10px;"></td>
         <td class="border-start border-end" style="padding: 5px 10px;"></td>
         <td class="border-start border-end" style="padding: 5px 10px;"></td>
-        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <% if payroll.completed? %><td class="border-start border-end" style="padding: 5px 10px;"></td><% end %>
       </tr>
 
       <tr>
@@ -55,116 +55,39 @@
         <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Pag-ibig Calamity</th>
         <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Total Deduction</th>
         <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Net Amount Due</th>
-        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">SIGNATURE</th>
+        <% if payroll.completed? %><th class="border-bottom border-start border-end" style="padding: 5px 10px;">SIGNATURE</th><% end %>
       </tr>
     </thead>
     <tbody>
-      <% payroll.cos_entries.each do |entry| %>
+      <% payroll.cos_entries.send(entries_to_view_for(current_user, payroll)).each do |entry| %>
         <tr data-controller="cos-entries">
         <td class="border" style="padding: 5px 10px;">
         <div class="d-flex align-items-center">
-          <% if payroll.pending? || payroll.forwarded_to_accounting?%>
-            <span class="form-check">
-              <input class="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckDefault"
-                      data-controller="entry-inclusion"
-                      data-entry-type="cos"
-                      data-entry-id="<%= entry.id %>"
-                      data-authenticity-token="<%= form_authenticity_token %>"
-                      data-action="input->entry-inclusion#updateEntryInclusion"
-                      <%= 'checked' if entry.included %>
-              >
-            </span>
-          <% end %>
+          <%= render_checkbox_if_needed(entry, current_user) %>
           <span><%=entry.user.full_name%></span>
         </div>
         </td>
         <td class="border" style="padding: 5px 10px;"><%=entry.user.position%></td>
         <td class="border" style="padding: 5px 10px;"><%=entry.user.department.humanize.upcase%></td>
         <td class="border" style="padding: 5px 10px;"><%=entry.rate.format%></td>
-    
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->cos-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="prev_rendered_hours"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.prev_rendered_hours%>">
-          <% else %>
-            <%=entry.prev_rendered_hours%>
-          <% end %>
-        </td>
-
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->cos-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="total_no_of_worked_days"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.total_no_of_worked_days%>">
-          <% else %>
-            <%=entry.total_no_of_worked_days%>
-          <% end %>
-        </td>
-
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :prev_rendered_hours, current_user) %></td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :total_no_of_worked_days, current_user) %></td>
         <td class="border" style="padding: 5px 10px;" data-cos-entries-target="summed_up_no_of_worked_days"><%=entry.summed_up_no_of_worked_days%></td>
-
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->cos-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="total_late_or_undertime"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.total_late_or_undertime%>">
-          <% else %>
-            <%=entry.total_late_or_undertime%>
-          <% end %>
-        </td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :total_late_or_undertime, current_user) %></td>
         <td class="border" style="padding: 5px 10px;" data-cos-entries-target="late_or_undertime_deduction"><%=entry.late_or_undertime_deduction.format%></td>
-        
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->cos-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="total_overtime_hours"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.total_overtime_hours%>">
-          <% else %>
-            <%=entry.total_overtime_hours%>
-          <% end %>
-        </td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :total_overtime_hours, current_user) %></td>
         <td class="border" style="padding: 5px 10px;" data-cos-entries-target="overtime_comp"><%=entry.overtime_comp.format%></td>
         <td class="border" style="padding: 5px 10px;" data-cos-entries-target="gross"><%=entry.gross.format%></td>
-
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->cos-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="sss"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.sss%>">
-          <% else %>
-            <%=entry.sss%>
-          <% end %>
-        </td>
-
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->cos-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="pagibig_calamity"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.pagibig_calamity%>">
-          <% else %>
-            <%=entry.pagibig_calamity%>
-          <% end %>
-        </td>
-        
-        <td class="border" style="padding: 5px 10px;">
-          <% if payroll.pending? %>
-            <input class="form-control form-control-sm"
-                    data-action="input->cos-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="pagibig_contribution"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.pagibig_contribution%>">
-          <% else %>
-            <%=entry.pagibig_contribution%>
-          <% end %>
-        </td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :sss, current_user) %></td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :pagibig_calamity, current_user) %></td>
+        <td class="border" style="padding: 5px 10px;"><%= render_editable_entry_or_value(entry, :pagibig_contribution, current_user) %></td>
 
         <td class="border" style="padding: 5px 10px;" data-cos-entries-target="total_deductions"><%=entry.total_deductions.format%></td>
         <td class="border" style="padding: 5px 10px;" data-cos-entries-target="net"><%=entry.net.format%></td>
-        <td class="border" style="padding: 5px 10px;" data-cos-entries-target="net"></td>
+        <% if payroll.completed? %><td class="border" style="padding: 5px 10px;" data-cos-entries-target="net"></td><% end %>
         </tr>
       <% end %>
+      <%= render partial: "payrolls/designates_template", locals: { payroll: payroll } if payroll.completed? %>
     </tbody>
   </table>
 </div>

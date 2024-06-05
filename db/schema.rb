@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_05_044823) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_05_151920) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,6 +27,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_05_044823) do
     t.integer "sss_cents", default: 0
     t.integer "pagibig_calamity_cents", default: 0
     t.integer "pagibig_contribution_cents", default: 0
+    t.integer "status", default: 0
     t.index ["payroll_id"], name: "index_cos_entries_on_payroll_id"
     t.index ["user_id"], name: "index_cos_entries_on_user_id"
   end
@@ -53,6 +54,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_05_044823) do
     t.integer "pagibig_mpl_cents", default: 0
     t.integer "advances_cents", default: 0
     t.integer "cfi_cents", default: 0
+    t.integer "status", default: 0
+    t.decimal "prev_rendered_hours", precision: 10, scale: 2, default: "0.0"
     t.index ["payroll_id"], name: "index_part_time_entries_on_payroll_id"
     t.index ["user_id"], name: "index_part_time_entries_on_user_id"
   end
@@ -100,6 +103,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_05_044823) do
     t.integer "evsu_mpc_cents", default: 0
     t.integer "salary_lwop_cents", default: 0
     t.integer "other_comp_cents", default: 0
+    t.integer "status", default: 0
     t.index ["payroll_id"], name: "index_regular_entries_on_payroll_id"
     t.index ["user_id"], name: "index_regular_entries_on_user_id"
   end
