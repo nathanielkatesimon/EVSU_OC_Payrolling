@@ -1,58 +1,133 @@
 <div class="table-responsive">
-  <table class="table">
+  <table>
     <thead>
+      <tr><td colspan=999 class="border text-center" style="padding: 5px 10px;">PAYROLL</td></tr>
+      <tr><td colspan=999 class="border" style="padding: 5px 10px;"></td></tr>
       <tr>
-        <% if payroll.pending? || payroll.forwarded_to_accounting? %>
-          <th></th>
-        <% end %>
-        <th>Name</th>
-        <th>Rate</th>
-        <th>Total rendered hrs</th>
-        <th>Gross</th>
-        <% payroll.deduction_types.each do |deduction_type| %>
-          <th><%= deduction_type %></th>
-        <% end %>
-        <th>Total deductions</th>
-        <th>Net</th>
+        <td colspan=6 class="border" style="padding: 5px 10px;">Entity Name: <span class="text-decoration-underline">EASTERN VISAYAS STATE UNIVERSITY-ORMOC CITY CAMPUS</span></td>
+        <td colspan=999 class="border" style="padding: 5px 10px;">Payroll No: <%= payroll.created_at.year %> (<%= payroll.batch.ordinalize %> BATCH)</td>
+      </tr>
+      <tr>
+        <td colspan=6 class="border" style="padding: 5px 10px;">Fund Cluster: <span class="text-decoration-underline">STF-INTERNALLY GENERATED FUND</span></td>
+        <td colspan=999 class="border" style="padding: 5px 10px;"></td>
+      </tr>
+      <tr><td colspan=999 class="border" style="padding: 5px 10px;"><i style="font-size: 12px;">We acknowledge receipt of cash shown opposite our name as full comensation of r services rendered for the period covered</i></td></tr>
+      
+      <tr>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td colspan=3 class="border text-center fw-bold" style="padding: 5px 10px;"></td>
+        <td colspan=6 class="border text-center fw-bold" style="padding: 5px 10px;">DEDUCTIONS</td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+      </tr>
+  
+
+      <tr>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Name</th>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Rate</th>
+        <th class="border" style="padding: 5px 10px;"><%= payroll.month %> <%= payroll.created_at.year %></th>
+        <th class="border" style="padding: 5px 10px;">Total # of hours</th>
+        <th class="border" style="padding: 5px 10px;">GROSS AMOUNT</th>
+        <th class="border" style="padding: 5px 10px;">TAX WI/HELD</th>
+        <th class="border" style="padding: 5px 10px;">PAG-IBIG PS/ES</th>
+        <th class="border" style="padding: 5px 10px;">PAG-IBIG MPL</th>
+        <th class="border" style="padding: 5px 10px;">Advances to Offices & Employees</th>
+        <th class="border" style="padding: 5px 10px;">CFI</th>
+        <th class="border" style="padding: 5px 10px;">TOTAL DEDUCTIONS</th>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Net Amount Due</th>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">SIGNATURE</th>
       </tr>
     </thead>
     <tbody>
       <% payroll.part_time_entries.each do |entry| %>
         <tr data-controller="part-time-entries">
-        <% if payroll.pending? || payroll.forwarded_to_accounting? %><td>
-          <div class="form-check">
-            <input class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                    data-controller="entry-inclusion"
-                    data-entry-type="part_time"
-                    data-entry-id="<%= entry.id %>"
-                    data-authenticity-token="<%= form_authenticity_token %>"
-                    data-action="input->entry-inclusion#updateEntryInclusion"
-                    <%= 'checked' if entry.included %>
-            >
+        <td class="border" style="padding: 5px 10px;">
+          <div class="d-flex align-items-center">
+            <% if payroll.pending? || payroll.forwarded_to_accounting? %>
+              <span class="form-check">
+                <input class="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                        data-controller="entry-inclusion"
+                        data-entry-type="part_time"
+                        data-entry-id="<%= entry.id %>"
+                        data-authenticity-token="<%= form_authenticity_token %>"
+                        data-action="input->entry-inclusion#updateEntryInclusion"
+                        <%= 'checked' if entry.included %>
+                >
+              </span>
+            <% end %>
+            <span><%=entry.user.full_name%></span>
           </div>
-        </td><% end %>
-        <td><%=entry.user.full_name%></td>
-        <td><%=entry.rate.format%></td>
-        <td>
+        <td class="border" style="padding: 5px 10px;"><%=entry.rate.format%></td>
+        <td class="border" style="padding: 5px 10px;">
           <% if payroll.pending? %>
             <input class="form-control form-control-sm"
-                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>"
+                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="total_rendered_hours"
                     data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.total_rendered_hours %>">
           <% else %>
             <%= entry.total_rendered_hours %>
           <% end %>
         </td>
-        <td data-part-time-entries-target="gross"><%=entry.gross.format%></td>
+        <td class="border" style="padding: 5px 10px;" data-part-time-entries-target="total_rendered_hours"><%=entry.total_rendered_hours%></td>
+        <td class="border" style="padding: 5px 10px;" data-part-time-entries-target="gross"><%=entry.gross.format%></td>
 
-        <% payroll.deduction_types.each do |deduction_type| %>
-          <td><%= entry.deductions_hash[deduction_type] %></td>
-        <% end %>
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="witholding_tax"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.witholding_tax %>">
+          <% else %>
+            <%= entry.witholding_tax %>
+          <% end %>
+        </td>
 
-        <td><%=entry.total_deductions.format%></td>
-        <td data-part-time-entries-target="net"><%=entry.net.format%></td>
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="pagibig_ps"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.pagibig_ps %>">
+          <% else %>
+            <%= entry.pagibig_ps %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="pagibig_mpl"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.pagibig_mpl %>">
+          <% else %>
+            <%= entry.pagibig_mpl %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="advances"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.advances %>">
+          <% else %>
+            <%= entry.advances %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->part-time-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="cfi"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%= entry.cfi %>">
+          <% else %>
+            <%= entry.cfi %>
+          <% end %>
+        </td>
+        
+
+        <td class="border" style="padding: 5px 10px;" data-part-time-entries-target="total_deductions"><%=entry.total_deductions.format%></td>
+        <td class="border" style="padding: 5px 10px;" data-part-time-entries-target="net"><%=entry.net.format%></td>
+        <td class="border" style="padding: 5px 10px;"></td>
         </tr>
       <% end %>
     </tbody>

@@ -2,6 +2,8 @@ class CosEntry < ApplicationRecord
   belongs_to :user
   belongs_to :payroll
 
+  monetize :sss_cents, :pagibig_calamity_cents, :pagibig_contribution_cents
+
   def available_users
     used_ids = payroll.cos_entries.pluck(:user_id)
     User.where.not(id: used_ids)
@@ -15,6 +17,10 @@ class CosEntry < ApplicationRecord
     @deductions ||= user.deductions
   end
 
+  def summed_up_no_of_worked_days     ## prev_rendered_days
+    @summed_up_no_of_worked_days ||= (prev_rendered_hours || 0) + (total_no_of_worked_days || 0)
+  end
+
   def deductions_hash
     total_deductions if @deductions_hash.nil?
 
@@ -22,7 +28,7 @@ class CosEntry < ApplicationRecord
   end
 
   def gross_without_adjustments
-    rate * total_no_of_worked_days
+    rate * summed_up_no_of_worked_days
   end
 
   def hourly_rate
@@ -46,7 +52,11 @@ class CosEntry < ApplicationRecord
     
     @total_deductions = Money.new(0)
 
-    deductions.each { |deduction| @total_deductions = @total_deductions + deduction.amount }
+    keys = CosEntry.monetized_attributes.keys
+
+    keys.each do |key|
+      @total_deductions = @total_deductions + self.send(key)
+    end
 
     @total_deductions
   end

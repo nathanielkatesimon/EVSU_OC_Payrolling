@@ -2,6 +2,8 @@ class PartTimeEntry < ApplicationRecord
   belongs_to :user
   belongs_to :payroll
 
+  monetize :witholding_tax_cents, :pagibig_ps_cents, :pagibig_mpl_cents, :advances_cents, :cfi_cents
+
   def rate
     @rate ||= user.hourly_rate
   end
@@ -35,9 +37,10 @@ class PartTimeEntry < ApplicationRecord
     @total_deductions = Money.new(0)
     @deductions_hash = {}
 
-    deductions.each do |deduction|
-      @total_deductions = @total_deductions + deduction.amount
-      @deductions_hash[deduction.name] = deduction.amount.format
+    keys = PartTimeEntry.monetized_attributes.keys
+
+    keys.each do |key|
+      @total_deductions = @total_deductions + self.send(key)
     end
 
     @total_deductions

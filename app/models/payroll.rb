@@ -30,6 +30,10 @@ class Payroll < ApplicationRecord
     @deduction_types ||= User.includes(:deductions).send(user_type).map { |user| user.deductions.pluck(:name) } .flatten.uniq
   end
 
+  def prev_month
+    @prev_month ||= Date.parse(month) - 1.month
+  end
+
   private
     def entry_type
       @entry_type ||= case self.for
@@ -56,9 +60,9 @@ class Payroll < ApplicationRecord
     def generate_payslips
       return unless status == "completed"
 
-      self.send(entry_type).each do |entry|
-        Payslip.find_or_create_by(entry: entry, user_id: entry.user_id)
-      end
+      # self.send(entry_type).each do |entry|
+      #   Payslip.find_or_create_by(entry: entry, user_id: entry.user_id)
+      # end
     end
 
     def clear_excluded_entries
@@ -73,7 +77,7 @@ class Payroll < ApplicationRecord
       collection = batch > 1 ? excluded_users : User.send(user_type)
 
       collection.each do |user|
-        self.send(entry_type).find_or_create_by(user: user)
+        entry = self.send(entry_type).find_or_create_by(user: user)
       end
     end
 end

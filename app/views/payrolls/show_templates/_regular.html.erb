@@ -1,62 +1,277 @@
 <div class="table-responsive">
-  <table class="table">
+  <table>
     <thead>
+      <tr><td colspan=999 class="border" style="padding: 5px 10px;">PAYROLL</td></tr>
       <tr>
-        <% if payroll.pending? || payroll.forwarded_to_accounting? %>
-          <th></th>
-        <% end %>
-        <th>User</th>
-        <th>SG</th>
-        <th>Basic Pay</th>
-        <th>Absents (Days)</th>
-        <th>Absents</th>
-        <th>Gross</th>
-        <% payroll.deduction_types.each do |deduction_type| %>
-          <th><%= deduction_type %></th>
-        <% end %>
-        <th>Total deductions</th>
-        <th>Net</th>
+        <td colspan="999" class="border" style="padding: 5px 10px;">For the period: &nbsp; <%= Date.parse(payroll.month).strftime("%-d/%-m/%Y") %> - <%= Date.parse(payroll.month).end_of_month.strftime("%-d/%-m/%Y") %></td>
+      </tr>
+      <tr><td colspan=999 class="border" style="padding: 5px 10px;">ENTITY NAME:  <b>EASTERN VISAYAS STATE UNIVERSITY - ORMOC CITY CAMPUS</b></td></tr>
+      <tr><td colspan=999 class="border" style="padding: 5px 10px;"><i style="font-size: 12px;">We acknowledge receipt of cash shown opposite our name as full comensation of r services rendered for the period covered</i></td></tr>
+      
+      <tr>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td colspan=4 class="border text-center fw-bold" style="padding: 5px 10px;">COMPENSATIONS</td>
+        <td colspan=16 class="border text-center fw-bold" style="padding: 5px 10px;">DEDUCTIONS</td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+      </tr>
+  
+      <tr>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td colspan=2 class="border text-center fw-bold" style="padding: 5px 10px;">MONTHLY SALARY</td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td colspan=5 class="border text-center fw-bold" style="padding: 5px 10px;">STATUTORY DEDUCTIONS</td>
+        <td colspan=11 class="border text-center fw-bold" style="padding: 5px 10px;">OTHER DEDUCTIONS</td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+        <td class="border-start border-end" style="padding: 5px 10px;"></td>
+      </tr>
+      
+      <tr>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Name</th>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">POSITION</th>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">SG</th>
+        <th class="border" style="padding: 5px 10px;">Basic Pay</th>
+        <th class="border" style="padding: 5px 10px;">Salary LWOP</th>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Other Compensations</th>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Gross Amount earned</th>
+
+        <th class="border" style="padding: 5px 10px;">Witholding Tax</th>
+        <th class="border" style="padding: 5px 10px;">GSIS PS</th>
+        <th class="border" style="padding: 5px 10px;">HDMF PS</th>
+        <th class="border" style="padding: 5px 10px;">HDMF MP2</th>
+        <th class="border" style="padding: 5px 10px;">PHI PS</th>
+        <th class="border" style="padding: 5px 10px;">GSIS CONSOL</th>
+        <th class="border" style="padding: 5px 10px;">GSIS GFAL</th>
+        <th class="border" style="padding: 5px 10px;">PLREG</th>
+        <th class="border" style="padding: 5px 10px;">GSIS Help</th>
+        <th class="border" style="padding: 5px 10px;">GSIS Policy</th>
+        <th class="border" style="padding: 5px 10px;">GSIS Emergency Loan</th>
+        <th class="border" style="padding: 5px 10px;">GSIS MPL</th>
+        <th class="border" style="padding: 5px 10px;">HDMF MPL</th>
+        <th class="border" style="padding: 5px 10px;">CFI</th>
+        <th class="border" style="padding: 5px 10px;">DISALLOWANCES</th>
+        <th class="border" style="padding: 5px 10px;">EVSU-MPC</th>
+
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Total deductions</th>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Net Amount Due</th>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">1st Quincena</th>
+        <th class="border-bottom border-start border-end" style="padding: 5px 10px;">2nd Quincena</th>
       </tr>
     </thead>
     <tbody>
-      <% payroll.regular_entries.each do |entry| %>
+      <% payroll.regular_entries.order(created_at: :desc).each do |entry| %>
         <tr data-controller="regular-entries">
-        <% if payroll.pending? || payroll.forwarded_to_accounting? %><td>
-          <div class="form-check">
-            <input class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                    data-controller="entry-inclusion"
-                    data-entry-type="regular"
-                    data-entry-id="<%= entry.id %>"
-                    data-authenticity-token="<%= form_authenticity_token %>"
-                    data-action="input->entry-inclusion#updateEntryInclusion"
-                    <%= 'checked' if entry.included %>
-            >
+        <td class="border" style="padding: 5px 10px;">
+          <div class="d-flex align-items-center">
+            <% if payroll.pending? || payroll.forwarded_to_accounting? %>
+              <span class="form-check">
+                <input class="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                        data-controller="entry-inclusion"
+                        data-entry-type="regular"
+                        data-entry-id="<%= entry.id %>"
+                        data-authenticity-token="<%= form_authenticity_token %>"
+                        data-action="input->entry-inclusion#updateEntryInclusion"
+                        <%= 'checked' if entry.included %>
+                >
+              </span>
+            <% end %>
+            <span><%=entry.user.full_name%></span>
           </div>
-        </td><% end %>
-        <td><%=entry.user.full_name%></td>
-        <td><%=entry.user.salary_grade%></td>
-        <td><%=entry.basic_pay.format%></td>
-        <td>
+        </td>
+        <td class="border" style="padding: 5px 10px;"><%=entry.user.position%></td>
+        <td class="border" style="padding: 5px 10px;"><%=entry.user.salary_grade%></td>
+        <td class="border" style="padding: 5px 10px;"><%=entry.basic_pay.format%></td>
+
+        <td class="border" style="padding: 5px 10px;">
           <% if payroll.pending? %>
             <input class="form-control form-control-sm"
-                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>"
-                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.absences%>">
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="salary_lwop"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.salary_lwop%>">
           <% else %>
-            <%= entry.absences %>
+            <%= entry.salary_lwop %>
           <% end %>
         </td>
-        <td data-regular-entries-target="absents"><%=entry.leave_without_pay.format%></td>
-        <td data-regular-entries-target="gross"><%=entry.gross.format%></td>
 
-        <% payroll.deduction_types.each do |deduction_type| %>
-          <td><%= entry.deductions_hash[deduction_type] %></td>
-        <% end %>
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="other_comp"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.other_comp%>">
+          <% else %>
+            <%= entry.other_comp %>
+          <% end %>
+        </td>
 
-        <td><%=entry.total_deductions.format%></td>
-        <td data-regular-entries-target="net"><%=entry.net.format%></td>
+        <td class="border" style="padding: 5px 10px;" data-regular-entries-target="gross"><%=entry.gross.format%></td>
+        
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="witholding_tax"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.witholding_tax%>">
+          <% else %>
+            <%= entry.witholding_tax %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;" data-regular-entries-target="gsis_ps"><%=entry.gsis_ps.format%></td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="hdmf_ps"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.hdmf_ps%>">
+          <% else %>
+            <%= entry.hdmf_ps %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="hdmf_mp2"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.hdmf_mp2%>">
+          <% else %>
+            <%= entry.hdmf_mp2 %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="phi_ps"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.phi_ps%>">
+          <% else %>
+            <%= entry.phi_ps %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="gsis_consol"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.gsis_consol%>">
+          <% else %>
+            <%= entry.gsis_consol %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="gsis_gfal"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.gsis_gfal%>">
+          <% else %>
+            <%= entry.gsis_gfal %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="plreg"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.plreg%>">
+          <% else %>
+            <%= entry.plreg %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="gsis_help"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.gsis_help%>">
+          <% else %>
+            <%= entry.gsis_help %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="gsis_policy"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.gsis_policy%>">
+          <% else %>
+            <%= entry.gsis_policy %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="gsis_emergency_loan"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.gsis_emergency_loan%>">
+          <% else %>
+            <%= entry.gsis_emergency_loan %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="gsis_mpl"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.gsis_mpl%>">
+          <% else %>
+            <%= entry.gsis_mpl %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="hdmf_mpl"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.hdmf_mpl%>">
+          <% else %>
+            <%= entry.hdmf_mpl %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="cfi"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.cfi%>">
+          <% else %>
+            <%= entry.cfi %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="disallowances"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.disallowances%>">
+          <% else %>
+            <%= entry.disallowances %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;">
+          <% if payroll.pending? %>
+            <input class="form-control form-control-sm"
+                    data-action="input->regular-entries#calculate" type="number" style="width:11ch;" data-id="<%= entry.id %>" data-value="evsu_mpc"
+                    data-authenticity-token="<%= form_authenticity_token %>" value="<%=entry.evsu_mpc%>">
+          <% else %>
+            <%= entry.evsu_mpc %>
+          <% end %>
+        </td>
+
+        <td class="border" style="padding: 5px 10px;" data-regular-entries-target="total_deductions"><%=entry.total_deductions%></td>
+        <td class="border" style="padding: 5px 10px;" data-regular-entries-target="net"><%=entry.net.format%></td>
+        <td class="border" style="padding: 5px 10px;" data-regular-entries-target="first_quincena"><%=entry.first_quincena.format%></td>
+        <td class="border" style="padding: 5px 10px;" data-regular-entries-target="second_quincena"><%=entry.second_quincena.format%></td>
         </tr>
       <% end %>
     </tbody>

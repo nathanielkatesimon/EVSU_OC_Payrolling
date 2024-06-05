@@ -25,8 +25,17 @@ class RegularEntriesController < ApplicationController
 
   def calculate
     respond_to do |format|
-      if @regular_entry.update(absences: params[:absences])
-        format.json { render json: { "success": true, "net": @regular_entry.net.format, "gross": @regular_entry.gross.format, "absents": @regular_entry.leave_without_pay.format } }
+      if @regular_entry.update(regular_entry_params)
+        format.json { render json: { 
+          "success": true, 
+          "net": @regular_entry.net.format, 
+          "gross": @regular_entry.gross.format, 
+          "gsis_ps": @regular_entry.gsis_ps.format, 
+          "first_quincena": @regular_entry.first_quincena.format, 
+          "second_quincena": @regular_entry.second_quincena.format,
+          "total_deductions": @regular_entry.total_deductions.format
+          } 
+        }
       else
         format.json { render json: { "success": false } }
       end
@@ -40,5 +49,11 @@ class RegularEntriesController < ApplicationController
 
     def set_policy
       authorize @regular_entry, policy_class: RegularEntriesControllerPolicy
+    end
+
+    def regular_entry_params
+      params.require(:regular_entry).permit(
+        :witholding_tax, :hdmf_ps, :hdmf_mp2, :phi_ps, :gsis_consol, :plreg, :gsis_help, :gsis_policy, :gsis_gfal, :gsis_emergency_loan, :gsis_mpl, :hdmf_mpl, :cfi, :disallowances, :evsu_mpc, :salary_lwop, :other_comp
+      )
     end
 end

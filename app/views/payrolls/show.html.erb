@@ -2,9 +2,7 @@
   <h3 class="me-auto"><%= @payroll.for.humanize %> Payroll for the month of <%= @payroll.month.capitalize %> - Batch <%= @payroll.batch %></h3>
   <%= render partial: "payrolls/payroll_actions", locals: { payroll: @payroll }%>
 </div>
-<div>
-  Status: <%== payroll_badge(@payroll) %>
-</div>
+<br>
 <% if @payroll.part_time? %>
   <%= render partial: "payrolls/show_templates/part_time", locals: { payroll: @payroll } %>
 <% elsif @payroll.cos? %>
