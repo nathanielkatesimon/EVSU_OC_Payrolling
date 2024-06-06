@@ -26,7 +26,7 @@
       <tr>
         <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Name</th>
         <th class="border-bottom border-start border-end" style="padding: 5px 10px;">Rate</th>
-        <th class="border" style="padding: 5px 10px;"><%= payroll.prev_month.strftime("%B") %> <%= payroll.created_at.year %></th>
+        <th class="border" style="padding: 5px 10px;"><%= payroll.prev_month.strftime("%B") %> <%= payroll.prev_month.year %></th>
         <th class="border" style="padding: 5px 10px;"><%= payroll.month.capitalize %> <%= payroll.created_at.year %></th>
         <th class="border" style="padding: 5px 10px;">Total # of hours</th>
         <th class="border" style="padding: 5px 10px;">GROSS AMOUNT</th>

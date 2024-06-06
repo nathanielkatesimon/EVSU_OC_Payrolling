@@ -11,6 +11,11 @@
   </div>
 
   <div class="mb-4">
+    <%= form.label :position, class: "required fs-6 fw-bold" %>
+    <%= form.text_field :position, class: 'form-control form-control-sm' %>
+  </div>
+
+  <div class="mb-4">
     <%= form.label :role, class: "required fs-6 fw-bold" %>
     <%= form.select :role, enum_to_options(User.roles), {}, class: 'form-control form-control-sm' %>
   </div>
